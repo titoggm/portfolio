@@ -2,7 +2,7 @@ import PortfolioTerminal from "@/components/portfolio-terminal";
 
 export default function Home() {
   return (
-    <main className="h-screen w-screen bg-neutral-900">
+    <main className="h-dvh w-screen bg-neutral-900">
       <PortfolioTerminal />
     </main>
   );

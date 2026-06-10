@@ -167,7 +167,7 @@ export const Terminal = ({
             <span id="hiddenSpan" className="invisible fixed" ref={hiddenSpanRef} />
             <input
               ref={inputRef}
-              className="fixed -z-10 w-0 h-0 opacity-0"
+              className="fixed -z-10 w-0 h-0 text-base opacity-0"
               value={currentLine}
               onKeyDown={handleCommand}
               onInput={handleInput}

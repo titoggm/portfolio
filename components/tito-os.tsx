@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import DecryptedText from "./DecryptedText";
 import {
@@ -119,6 +119,28 @@ interface TrackPlayerHandle {
   prev: () => void;
 }
 
+function TrackEmbed({ track }: { readonly track: Track }) {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <div className="relative w-full h-[300px] bg-neutral-950 overflow-hidden">
+      <iframe
+        title={`Track player for ${track.title}`}
+        src={track.src}
+        width="100%"
+        height="300"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture; accelerometer; gyroscope; web-share"
+        loading="lazy"
+        onLoad={() => setLoaded(true)}
+        className={`block transition-opacity duration-300 ${
+          loaded ? "opacity-100" : "opacity-0"
+        }`}
+        style={{ border: 0 }}
+      />
+    </div>
+  );
+}
+
 const TrackPlayer = forwardRef<TrackPlayerHandle, { tracks: Track[] }>(
   ({ tracks }, ref) => {
     const [index, setIndex] = useState(0);
@@ -136,17 +158,7 @@ const TrackPlayer = forwardRef<TrackPlayerHandle, { tracks: Track[] }>(
     return (
       <div className="py-2">
         {/* Full-width embed */}
-        <iframe
-          key={track.src}
-          title={`Track player for ${track.title}`}
-          src={track.src}
-          width="100%"
-          height="300"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture; accelerometer; gyroscope; web-share"
-          loading="lazy"
-          className="block"
-          style={{ border: 0 }}
-        />
+        <TrackEmbed key={track.src} track={track} />
 
         {/* Caption bar */}
         <div className="border border-t-0 border-neutral-800 px-3 py-2 flex items-center justify-between">
@@ -180,7 +192,26 @@ const TrackPlayer = forwardRef<TrackPlayerHandle, { tracks: Track[] }>(
             <span>
               {String(index + 1).padStart(2, "0")} / {String(tracks.length).padStart(2, "0")}
             </span>
-            <span>↑ ↓</span>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={prev}
+                disabled={index === 0}
+                aria-label="Previous track"
+                className="p-1 disabled:opacity-30 enabled:hover:text-white enabled:cursor-pointer"
+              >
+                <ChevronUp size={14} />
+              </button>
+              <button
+                type="button"
+                onClick={next}
+                disabled={index === tracks.length - 1}
+                aria-label="Next track"
+                className="p-1 disabled:opacity-30 enabled:hover:text-white enabled:cursor-pointer"
+              >
+                <ChevronDown size={14} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -497,9 +528,15 @@ export function TitoOS({ onExit }: Readonly<Props>) {
               {filteredCommands.map((cmd, i) => {
                 const isActive = i === selectedIndex;
                 return (
-                  <div
+                  <button
                     key={cmd.name}
-                    className="pl-5 pr-4 py-1 flex items-center"
+                    type="button"
+                    onMouseDown={(event) => {
+                      event.preventDefault();
+                      executeCommand(cmd);
+                      setCurrentLine("");
+                    }}
+                    className="w-full pl-5 pr-4 py-1 flex items-center text-left cursor-pointer"
                   >
                     <span className="text-sm shrink-0 w-56">
                       {isActive ? (
@@ -543,7 +580,7 @@ export function TitoOS({ onExit }: Readonly<Props>) {
                         </span>
                       )}
                     </span>
-                  </div>
+                  </button>
                 );
               })}
             </motion.div>
@@ -557,7 +594,7 @@ export function TitoOS({ onExit }: Readonly<Props>) {
           <div className="flex-grow flex items-center">
             <input
               ref={inputRef}
-              className="fixed -z-10 w-0 h-0 opacity-0"
+              className="fixed -z-10 w-0 h-0 text-base opacity-0"
               value={currentLine}
               onKeyDown={handleKeyDown}
               onChange={handleChange}
@@ -590,7 +627,10 @@ export function TitoOS({ onExit }: Readonly<Props>) {
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.2 }}
           >
-            <ProjectsOverlay ref={projectsOverlayRef} />
+            <ProjectsOverlay
+              ref={projectsOverlayRef}
+              onClose={() => setShowProjects(false)}
+            />
           </motion.div>
         )}
       </AnimatePresence>
