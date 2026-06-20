@@ -1,22 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
-import localFont from "next/font/local";
+import "firacode/distr/fira_code.css";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const monaco = localFont({
-  src: "../Menlo-Regular.ttf",
-  variable: "--font-monaco",
-});
-
-const holland = localFont({
-  src: "../Holland-eZyA6.ttf",
-  variable: "--font-holland",
-});
 
 const SITE_URL = "https://titogarcia999.dev";
 const SITE_NAME = "titogarcia999.dev";
@@ -60,10 +44,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${monaco.variable} ${holland.variable} h-full antialiased dark`}
-    >
+    <html lang="en" className="h-full antialiased dark">
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

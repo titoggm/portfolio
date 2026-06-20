@@ -6,7 +6,12 @@ export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
 export default async function AppleIcon() {
-  const fontData = await readFile(join(process.cwd(), "Menlo-Regular.ttf"));
+  const fontData = await readFile(
+    join(
+      process.cwd(),
+      "node_modules/firacode/distr/ttf/FiraCode-Regular.ttf"
+    )
+  );
 
   return new ImageResponse(
     (
@@ -18,7 +23,7 @@ export default async function AppleIcon() {
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: "#0a0a0a",
-          fontFamily: "Menlo",
+          fontFamily: "Fira Code",
           fontSize: 84,
           color: "#fafafa",
         }}
@@ -30,7 +35,7 @@ export default async function AppleIcon() {
       ...size,
       fonts: [
         {
-          name: "Menlo",
+          name: "Fira Code",
           data: fontData,
           style: "normal",
         },

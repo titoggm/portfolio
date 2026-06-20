@@ -7,11 +7,32 @@ import React, {
   useState,
 } from "react";
 import Image from "next/image";
+import { motion } from "motion/react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import DecryptedText from "./DecryptedText";
+import DecryptedText from "./decrypted-text";
 
 const IMAGE_SIZES = "(max-width: 672px) 100vw, 672px";
+
+function Reveal({
+  className,
+  children,
+}: Readonly<{
+  className?: string;
+  children: React.ReactNode;
+}>) {
+  return (
+    <motion.section
+      className={className}
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "0px 0px -80px 0px" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
+      {children}
+    </motion.section>
+  );
+}
 
 interface ProjectSection {
   id: string;
@@ -42,7 +63,7 @@ const PROJECTS: Project[] = [
         content: (
           <div className="space-y-8 text-sm leading-relaxed max-w-2xl">
             {/* Title */}
-            <section className="space-y-1">
+            <Reveal className="space-y-1">
               <h1 className="text-white text-xl">Augmenting myself and my teammates through agentic Content Management System (CMS) workflows</h1>
               <Image
                 src="/contentful/pai-ready-contentful.png"
@@ -53,10 +74,10 @@ const PROJECTS: Project[] = [
                 className="w-full h-auto mt-4"
               />
               <p className="text-neutral-300 text-xs mt-1 text-center">Rondo PAI ready to do some Contentful work</p>
-            </section>
+            </Reveal>
 
             {/* The Problem */}
-            <section className="space-y-4">
+            <Reveal className="space-y-4">
               <h2 className="text-white text-base">The Problem</h2>
               <p className="text-neutral-300">
                 I noticed our team was spending a significant amount of time on repetitive,
@@ -119,10 +140,10 @@ const PROJECTS: Project[] = [
                 inside Contentful. Designers can then review, refine, and finalize the page
                 before it goes live.
               </p>
-            </section>
+            </Reveal>
 
             {/* The Solution */}
-            <section className="space-y-4">
+            <Reveal className="space-y-4">
               <h2 className="text-white text-base">The Solution</h2>
               <p className="text-neutral-300">
                 An easy-to-use Contentful Agent Skill that can be installed by anyone on the team.
@@ -223,10 +244,10 @@ const PROJECTS: Project[] = [
                   </p>
                 </div>
               </div>
-            </section>
+            </Reveal>
 
             {/* What's Next */}
-            <section className="space-y-4">
+            <Reveal className="space-y-4">
               <h2 className="text-white text-base">What&apos;s Next</h2>
               <p className="text-neutral-300">
                 As designers continue using the Contentful Skill, we&apos;re expanding the system
@@ -242,7 +263,7 @@ const PROJECTS: Project[] = [
                 Over time, the goal is to continue removing operational friction so designers
                 can focus more on creative and strategic work, and less on the repetitive tasks.
               </p>
-            </section>
+            </Reveal>
           </div>
         ),
       },
@@ -259,18 +280,18 @@ const PROJECTS: Project[] = [
         label: "Case Study",
         content: (
           <div className="space-y-8 text-sm leading-relaxed max-w-2xl">
-            <section className="space-y-1">
+            <Reveal className="space-y-1">
               <h1 className="text-white text-xl">Nave Bank Card Design</h1>
-            </section>
+            </Reveal>
 
             {/* Final Designs */}
-            <section className="space-y-4">
+            <Reveal className="space-y-4">
 
               <div className="space-y-6">
                 <div className="space-y-2">
                   <p className="text-neutral-400 text-xs">Black Metal with Purpura</p>
                   <Image
-                    src="/nave-bank/card-black-metal-purpura.jpg"
+                    src="/nave-bank/black-metal-purpura-new.jpg"
                     alt="Nave Bank card design — Black metal with Purpura"
                     width={1920}
                     height={1080}
@@ -303,10 +324,10 @@ const PROJECTS: Project[] = [
                   />
                 </div>
               </div>
-            </section>
+            </Reveal>
 
             {/* Market Research */}
-            <section className="space-y-4">
+            <Reveal className="space-y-4">
               <h2 className="text-white text-base">Market Research</h2>
               <p className="text-neutral-300">
                 Looked at local banks in Puerto Rico, larger US banks, and a few Neobanks.
@@ -329,10 +350,10 @@ const PROJECTS: Project[] = [
                   className="w-full h-auto"
                 />
               </div>
-            </section>
+            </Reveal>
 
             {/* Inspo / Sketches */}
-            <section className="space-y-4">
+            <Reveal className="space-y-4">
               <h2 className="text-white text-base">Inspo / Sketches</h2>
               <p className="text-neutral-300">
                 Started by looking at spaces where light does all the talking. The work of artists
@@ -351,10 +372,10 @@ const PROJECTS: Project[] = [
                 sizes={IMAGE_SIZES}
                 className="w-full h-auto"
               />
-            </section>
+            </Reveal>
 
             {/* Ideation */}
-            <section className="space-y-4">
+            <Reveal className="space-y-4">
               <h2 className="text-white text-base">Ideation</h2>
               <p className="text-neutral-300">
                 When ideating I like to start with a blank page and let myself go. Not worrying
@@ -368,10 +389,10 @@ const PROJECTS: Project[] = [
                 sizes={IMAGE_SIZES}
                 className="w-full h-auto"
               />
-            </section>
+            </Reveal>
 
             {/* Thank You */}
-            <section>
+            <Reveal>
               <Image
                 src="/nave-bank/thank-you.jpg"
                 alt="Thank you — Nave Bank Design Intern"
@@ -380,7 +401,7 @@ const PROJECTS: Project[] = [
                 sizes={IMAGE_SIZES}
                 className="w-full h-auto"
               />
-            </section>
+            </Reveal>
           </div>
         ),
       },
@@ -470,7 +491,7 @@ export const ProjectsOverlay = forwardRef<
 
           {/* Content area */}
           <ScrollArea className="flex-1 min-h-0">
-            <div className="pl-4 pr-6 py-6">{section.content}</div>
+            <div className="px-4 sm:px-6 py-6 flex justify-center">{section.content}</div>
           </ScrollArea>
 
           {/* Bottom hint bar */}

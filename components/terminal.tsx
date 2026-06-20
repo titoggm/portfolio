@@ -18,14 +18,14 @@ interface Props {
   disableClearCommand?: boolean;
 }
 
-const ignoredKeys = [
+const ignoredKeys = new Set([
   "Escape", "Tab", "Enter", "Shift", "Control", "Alt", "AltGraph", "Meta",
   "CapsLock", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight",
   "Backspace", "Delete", "Insert", "NumLock", "ScrollLock",
   "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12",
   "Play", "Pause", "Stop", "PreviousTrack", "NextTrack",
   "VolumeUp", "VolumeDown", "Mute", "Home", "End", "PageUp", "PageDown", "ContextMenu",
-];
+]);
 
 const getPrompt = (line: React.ReactNode, index: number): React.ReactNode => {
   if (index % 2 === 0 && typeof line === "string") {
@@ -69,11 +69,27 @@ export const Terminal = ({
   const [output, setOutput] = useState<Array<React.ReactNode | undefined>>([]);
   const [focused, setFocused] = useState(true);
   const [currentLine, setCurrentLine] = useState<string>("");
+  const [caretBlinking, setCaretBlinking] = useState(false);
 
   const wrapperRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const caretRef = useRef<HTMLDivElement>(null);
   const hiddenSpanRef = useRef<HTMLSpanElement>(null);
+  const caretIdleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Real terminals hold the caret solid while you type and only resume
+  // blinking once you've paused, instead of blinking on every keystroke.
+  const resetCaretIdleTimer = () => {
+    setCaretBlinking(false);
+    if (caretIdleTimer.current) clearTimeout(caretIdleTimer.current);
+    caretIdleTimer.current = setTimeout(() => setCaretBlinking(true), 500);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (caretIdleTimer.current) clearTimeout(caretIdleTimer.current);
+    };
+  }, []);
 
   const setCaretPosition = () => {
     const caretPosition = inputRef.current?.value.length || 0;
@@ -86,6 +102,7 @@ export const Terminal = ({
   };
 
   const handleCommand = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    resetCaretIdleTimer();
     if (event.key === "Backspace") return setCurrentLine(currentLine.substring(0, currentLine.length));
     if (event.key === "Enter") {
       processCommand(currentLine);
@@ -93,10 +110,11 @@ export const Terminal = ({
     }
   };
 
-  const handleInput = (event: React.FormEvent<HTMLInputElement>) => {
+  const handleInput = (event: React.InputEvent<HTMLInputElement>) => {
     event.preventDefault();
+    resetCaretIdleTimer();
     const value = event.currentTarget.value;
-    if (!ignoredKeys.includes(value)) {
+    if (!ignoredKeys.has(value)) {
       setCaretPosition();
       setCurrentLine(value);
     }
@@ -106,12 +124,12 @@ export const Terminal = ({
     const newOutput = [...output, `${trimmedUserName}@${trimmedMachineName}:~$ ${cmd}`];
     const foundCommand = allCommands.find((command) => command.command === cmd);
 
-    if (!foundCommand) {
-      newOutput.push(onCommandNotFound(cmd));
-    } else {
+    if (foundCommand) {
       if (!disableClearCommand && foundCommand.command === "clear") return setOutput([]);
       if (foundCommand.result) newOutput.push(foundCommand.result);
       if (foundCommand.sideEffect) foundCommand.sideEffect();
+    } else {
+      newOutput.push(onCommandNotFound(cmd));
     }
 
     setOutput(newOutput);
@@ -138,22 +156,23 @@ export const Terminal = ({
 
   const handleFocusInput = () => {
     setFocused(true);
+    resetCaretIdleTimer();
     if (inputRef.current) inputRef.current.focus();
   };
 
   const handleBlur = () => setFocused(false);
 
   return (
+    // The click handler only redirects focus to the real <input> below, which
+    // already provides full native keyboard/touch/AT accessibility on its own.
     <div
-      className="flex flex-col text-white bg-neutral-950 w-full h-full font-mono text-sm"
-      onFocus={handleFocusInput}
-      onBlur={handleBlur}
-      tabIndex={1}
+      className="flex flex-col text-white w-full h-full font-mono text-sm"
+      onClick={handleFocusInput} // NOSONAR typescript:S6848
     >
       {/* Output */}
-      <div className="overflow-y-auto pt-4 px-2" ref={wrapperRef}>
+      <div className="overflow-y-auto pt-2 px-4" ref={wrapperRef}>
         <TypeAnimation speed={90} cursor={false} sequence={[initialFeed]} />
-        {output.map(getPrompt)}
+        {output.map((line, index) => getPrompt(line, index))}
         <div className="flex relative">
           <span>
             <span className="text-white font-bold">{trimmedUserName}</span>
@@ -171,6 +190,8 @@ export const Terminal = ({
               value={currentLine}
               onKeyDown={handleCommand}
               onInput={handleInput}
+              onFocus={handleFocusInput}
+              onBlur={handleBlur}
               autoComplete="off"
               autoCapitalize="none"
               autoCorrect="off"
@@ -182,7 +203,9 @@ export const Terminal = ({
               {focused && (
                 <div
                   ref={caretRef}
-                  className="absolute top-0 h-full bg-white w-[10px] animate-caret-blink"
+                  className={`absolute top-[1px] bottom-[2px] bg-neutral-300 w-[9px] ${
+                    caretBlinking ? "animate-caret-blink" : ""
+                  }`}
                 />
               )}
             </div>

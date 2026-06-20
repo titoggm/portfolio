@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { ChevronDown, ChevronRight, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import DecryptedText from "./DecryptedText";
+import DecryptedText from "./decrypted-text";
 import {
   ProjectsOverlay,
   type ProjectsOverlayHandle,
@@ -25,7 +25,7 @@ const COMMANDS: CLICommand[] = [
   {
     name: "prime-about",
     description:
-      "Gain a general understanding of Tito's background and interests",
+      "Gain a general understanding of Tito",
   },
   {
     name: "prime-track-ids",
@@ -36,8 +36,8 @@ const COMMANDS: CLICommand[] = [
     description: "View selected projects and creative work by Tito",
   },
   {
-    name: "prime-work-experience",
-    description: "Browse through Tito's work experience",
+    name: "prime-resume",
+    description: "View Tito's resume",
   },
   {
     name: "prime-linkedin",
@@ -54,6 +54,7 @@ const COMMANDS: CLICommand[] = [
 ];
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/titoggm";
+const RESUME_URL = "/resume.pdf";
 const EMAIL = "titogm9@gmail.com";
 
 // ---------------------------------------------------------------------------
@@ -64,23 +65,35 @@ interface Track {
   src: string;
   title: string;
   artist: string;
+  start?: number; // start time in seconds
 }
 
 const TRACKS: Track[] = [
+  {
+    src: "https://www.youtube.com/embed/PHEbmPRBuU8?si=Lf8eVViO19JAHkVP",
+    title: "Spirit Wave",
+    artist: "Mall Grab",
+  },
+  {
+    src: "https://www.youtube.com/embed/8tkFXU2xS6Q?si=OoeFKNAUOi72z5nZ",
+    title: "Builded Mind",
+    artist: "Ron Obvious",
+    start: 108,
+  },
+  {
+    src: "https://www.youtube.com/embed/os9WVfGR6uE?si=RcnQAsPDWai8DYB2",
+    title: "The Only Girl",
+    artist: "Faster Horses",
+  },
   {
     src: "https://www.youtube.com/embed/yxW3R2us0r0?si=UsrJWi6gbvKlaKGq",
     title: "Slow Burner (Effy Remix)",
     artist: "Interplanetary Criminal, Effy",
   },
   {
-    src: "https://www.youtube.com/embed/jCVrjYxoqBg?si=7P4RpVkA8rJ27yFZ",
-    title: "New York",
-    artist: "Mall Grab",
-  },
-  {
-    src: "https://www.youtube.com/embed/LUApGPHWnuo?si=xtRW6EmhZgc6SgFC",
-    title: "Days In The Sun (Forester Remix)",
-    artist: "Forester, Ziggy Alberts",
+    src: "https://www.youtube.com/embed/W_LlRsvdebI?si=3qI0yx4oi3xOxNHT",
+    title: "Make You Whole (Dusky Remix)",
+    artist: "Andronicus, Dusky",
   },
   {
     src: "https://www.youtube.com/embed/xJIYF6KwK3w?si=_MSN0QpDEz5GNfiX",
@@ -88,29 +101,34 @@ const TRACKS: Track[] = [
     artist: "Prospa",
   },
   {
-    src: "https://www.youtube.com/embed/L9PPdpDINUU?si=9uUA3ivoZG1CE1ta",
-    title: "Slamb",
-    artist: "Inner Child",
+    src: "https://www.youtube.com/embed/-1PgQkGPQXE?si=tm0RhUXFeyXFZ4QB",
+    title: "More Than I Can Take (Y Tribe Instrumental)",
+    artist: "Absolute",
   },
   {
-    src: "https://www.youtube.com/embed/yHtckvNmXUA?si=MyPqV4t69mgNWcHW",
-    title: "Break It Down",
-    artist: "Braga Circuit",
+    src: "https://www.youtube.com/embed/dp2BhqQtenc?si=Ql9cel6t1tJw8Dce",
+    title: "Salzburg",
+    artist: "Sam Alfred",
   },
   {
-    src: "https://www.youtube.com/embed/p2b-Kmg9Peo?si=sD7Kszo8erMXMbOX",
-    title: "Circles (Track 1)",
-    artist: "Kerri Chandler ft Natalia Kissoon",
+    src: "https://www.youtube.com/embed/_14ZfyhB_ew?si=MrmiY4KDr01u_Mi8",
+    title: "Don't Hurt Me",
+    artist: "Cache",
   },
   {
-    src: "https://www.youtube.com/embed/6QWS8mKq6us?si=8vaqWrGLh1FCKBVy",
-    title: "Dermot (See Yourself In My Eyes)",
-    artist: "Fred Again.., Dermot Kennedy",
+    src: "https://www.youtube.com/embed/hoFhIm4ppnA?si=oPXE4mwiOqApkR78",
+    title: "Everywhere",
+    artist: "Lxury",
   },
   {
-    src: "https://www.youtube.com/embed/4UNonFF4TN8?si=YKllPawstzDDp7B7",
-    title: "Camellia",
-    artist: "Aldonna, Dusky",
+    src: "https://www.youtube.com/embed/wuRXPhrABJY?si=GVf3Vt0tMTKai8XS",
+    title: "Aqueous Regression",
+    artist: "Dakpa",
+  },
+  {
+    src: "https://www.youtube.com/embed/wuRXPhrABJY?si=GVf3Vt0tMTKai8XS",
+    title: "Aqueous Regression",
+    artist: "Dakpa",
   },
 ];
 
@@ -122,11 +140,17 @@ interface TrackPlayerHandle {
 function TrackEmbed({ track }: { readonly track: Track }) {
   const [loaded, setLoaded] = useState(false);
 
+  let src = track.src;
+  if (track.start) {
+    const separator = track.src.includes("?") ? "&" : "?";
+    src = `${track.src}${separator}start=${track.start}`;
+  }
+
   return (
-    <div className="relative w-full h-[300px] bg-neutral-950 overflow-hidden">
+    <div className="relative w-full h-[300px] bg-neutral-950 overflow-hidden border border-b-0 border-neutral-800">
       <iframe
         title={`Track player for ${track.title}`}
-        src={track.src}
+        src={src}
         width="100%"
         height="300"
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture; accelerometer; gyroscope; web-share"
@@ -161,32 +185,10 @@ const TrackPlayer = forwardRef<TrackPlayerHandle, { tracks: Track[] }>(
         <TrackEmbed key={track.src} track={track} />
 
         {/* Caption bar */}
-        <div className="border border-t-0 border-neutral-800 px-3 py-2 flex items-center justify-between">
-          <div className="flex flex-col gap-0.5">
-            <DecryptedText
-              key={`title-${index}`}
-              animateOn="view"
-              sequential={false}
-              revealDirection="center"
-              text={track.title}
-              speed={80}
-              maxIterations={4}
-              useOriginalCharsOnly
-              className="text-white text-sm leading-none"
-              encryptedClassName="text-neutral-600 text-sm leading-none"
-            />
-            <DecryptedText
-              key={`artist-${index}`}
-              animateOn="view"
-              sequential={false}
-              revealDirection="center"
-              text={track.artist}
-              speed={80}
-              maxIterations={4}
-              useOriginalCharsOnly
-              className="text-neutral-500 text-xs leading-none"
-              encryptedClassName="text-neutral-700 text-xs leading-none"
-            />
+        <div className="border border-t-0 border-neutral-800 px-3 py-4 flex items-center justify-between">
+          <div className="flex flex-col gap-2">
+            <span className="text-white text-sm leading-none">{track.title}</span>
+            <span className="text-neutral-500 text-xs leading-none">{track.artist}</span>
           </div>
           <div className="flex items-center gap-3 text-xs text-neutral-600 shrink-0">
             <span>
@@ -234,7 +236,7 @@ const INITIAL_OUTPUT: OutputItem[] = [
     id: 1,
     node: (
       <p className="text-neutral-300">
-        [ TG9 ] v1.0 — A terminal tool for exploring Tito&apos;s work, thinking, interests, and background.
+        TG9 v1.1.192 
       </p>
     ),
   },
@@ -251,12 +253,29 @@ export function TitoOS({ onExit }: Readonly<Props>) {
   const [playerActive, setPlayerActive] = useState(false);
   const [showProjects, setShowProjects] = useState(false);
   const [output, setOutput] = useState<OutputItem[]>(INITIAL_OUTPUT);
+  const [caretBlinking, setCaretBlinking] = useState(false);
 
   const outputRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const nextId = useRef(2);
   const activePlayerRef = useRef<TrackPlayerHandle | null>(null);
   const projectsOverlayRef = useRef<ProjectsOverlayHandle | null>(null);
+  const caretIdleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Real terminals hold the caret solid while you type and only resume
+  // blinking once you've paused, instead of blinking on every keystroke.
+  const resetCaretIdleTimer = useCallback(() => {
+    setCaretBlinking(false);
+    if (caretIdleTimer.current) clearTimeout(caretIdleTimer.current);
+    caretIdleTimer.current = setTimeout(() => setCaretBlinking(true), 500);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (caretIdleTimer.current) clearTimeout(caretIdleTimer.current);
+    };
+  }, []);
 
   const isCommandMode = currentLine.startsWith("/");
   const query = isCommandMode ? currentLine.slice(1).toLowerCase() : "";
@@ -281,39 +300,42 @@ export function TitoOS({ onExit }: Readonly<Props>) {
     switch (cmd.name) {
       case "prime-about": {
         const lines: React.ReactNode[] = [
-          <span key="gap-0" />,
-          <span key="bio-1" className="text-neutral-300 leading-relaxed">
-            Hey, I&apos;m Tito — an interdisciplinary product designer working across design, AI, and engineering.
+          <span key="gap-0" className="block h-2" />,
+          <span key="name-1" className="text-white text-[15px]">
+            Tito Garcia
           </span>,
-          <span key="gap-1" />,
-          <div key="phil-1" className="flex gap-4">
-            <span className="text-neutral-500 shrink-0 w-24">philosophy</span>
-            <span className="text-neutral-300">
-              Create systems designed for human and AI collaboration.
-            </span>
-          </div>,
-          <div key="edu-1" className="flex gap-4">
-            <span className="text-neutral-500 shrink-0 w-24">education</span>
-            <span className="text-neutral-300">
-              Computational Psychology · Colby College
-            </span>
-          </div>,
-          <div key="int-1" className="flex gap-4">
-            <span className="text-neutral-500 shrink-0 w-24">interests</span>
-            <span className="text-neutral-300">
-              Agentic design &amp; engineering · DJing &amp; vinyl · Wake surfing
-            </span>
-          </div>,
-          <span key="gap-2" />,
-          <div key="reach-1" className="flex gap-4">
-            <span className="text-neutral-500 shrink-0 w-24">reach out</span>
-            <span className="text-neutral-300">
-              <span className="text-white">/prime-email</span>
-              {" · "}
-              <span className="text-white">/prime-linkedin</span>
-            </span>
-          </div>,
-          <span key="gap-3" />,
+          <span key="gap-1" className="block h-2" />,
+          <span key="bio-1" className="text-neutral-300 leading-relaxed">
+            I was born in Puerto Rico and grew up in Boston, Massachusetts.
+          </span>,
+          <span key="gap-1b" className="block h-2" />,
+          <span key="bio-2" className="text-neutral-300 leading-relaxed">
+            Creativity, curiosity, and interdisciplinarity guide how I work.
+          </span>,
+          <span key="gap-2" className="block h-2" />,
+          <span key="bio-3" className="text-neutral-300 leading-relaxed">
+            I come from a background of different cultures and exploration
+            across domains such as computer science, design, psychology, and
+            architecture, which have shaped my taste and the way I think and
+            solve problems as a builder and creative.
+          </span>,
+          <span key="gap-3" className="block h-2" />,
+          <span key="bio-4" className="text-neutral-300 leading-relaxed">
+            I work at the intersection of design, AI, and engineering. I
+            enjoy creating systems and user experiences designed for human
+            and AI collaboration. What excites me most is combining strong
+            design principles with agentic design and engineering skills to
+            optimize design and code workflows.
+          </span>,
+          <span key="gap-4" className="block h-2" />,
+          <span key="reach-1" className="text-neutral-300">
+            <span className="text-neutral-400">/prime-linkedin</span>
+            {" · "}
+            <span className="text-neutral-400">/prime-email</span>
+            {" · "}
+            <span className="text-neutral-400">/prime-resume</span>
+          </span>,
+          <span key="gap-5" className="block h-3" />,
         ];
         lines.forEach((node, i) => {
           setTimeout(() => appendOutput(node), i * 60);
@@ -321,25 +343,22 @@ export function TitoOS({ onExit }: Readonly<Props>) {
         break;
       }
 
-      case "prime-work-experience": {
-        const lines: React.ReactNode[] = [
-          <span key="gap-0" />,
-          <span key="rv-company" className="text-white">Red Ventures</span>,
-          <span key="rv-meta" className="text-neutral-500">
-            Product Designer <span className="text-neutral-700">·</span> Aug 2024 — Present
-          </span>,
-          <span key="gap-1" />,
-          <span key="nb-company" className="text-white">Nave Bank</span>,
-          <span key="nb-meta" className="text-neutral-500">
-            Design Intern <span className="text-neutral-700">·</span> Jun 2023 — Jul 2023
-          </span>,
-          <span key="gap-2" />,
-        ];
-        lines.forEach((node, i) => {
-          setTimeout(() => appendOutput(node), i * 70);
-        });
+      case "prime-resume":
+        window.open(RESUME_URL, "_blank", "noopener,noreferrer");
+        appendOutput(
+          <span className="text-neutral-300">
+            Opening resume...{" "}
+            <a
+              href={RESUME_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-white hover:text-neutral-300"
+            >
+              {RESUME_URL}
+            </a>
+          </span>
+        );
         break;
-      }
 
       case "prime-track-ids": {
         if (playerActive) {
@@ -356,7 +375,7 @@ export function TitoOS({ onExit }: Readonly<Props>) {
       }
 
       case "prime-linkedin":
-        window.open(LINKEDIN_URL, "_blank");
+        window.open(LINKEDIN_URL, "_blank", "noopener,noreferrer");
         appendOutput(
           <span className="text-neutral-300">
             Opening LinkedIn profile...{" "}
@@ -410,69 +429,85 @@ export function TitoOS({ onExit }: Readonly<Props>) {
     if (inputRef.current) inputRef.current.focus();
   }, []);
 
+  // Returns true once a handler has fully handled (and should stop) the event.
+  const handleProjectsOverlayKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ): boolean => {
+    if (!showProjects || !projectsOverlayRef.current) return false;
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+      setShowProjects(false);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      projectsOverlayRef.current.prevProject();
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      projectsOverlayRef.current.nextProject();
+    }
+    return true;
+  };
+
+  const handleSuggestionsKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ): boolean => {
+    if (!showSuggestions) return false;
+
+    switch (event.key) {
+      case "ArrowDown":
+        event.preventDefault();
+        setSelectedIndex((i) => Math.min(i + 1, filteredCommands.length - 1));
+        return true;
+      case "ArrowUp":
+        event.preventDefault();
+        setSelectedIndex((i) => Math.max(i - 1, 0));
+        return true;
+      case "Escape":
+        event.preventDefault();
+        setCurrentLine("");
+        return true;
+      case "Enter":
+        event.preventDefault();
+        executeCommand(filteredCommands[selectedIndex]);
+        setCurrentLine("");
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  // Route arrow keys to the track player when no suggestions are open
+  const handlePlayerKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ): boolean => {
+    if (showSuggestions || !activePlayerRef.current) return false;
+
+    switch (event.key) {
+      case "ArrowUp":
+        event.preventDefault();
+        activePlayerRef.current.prev();
+        return true;
+      case "ArrowDown":
+        event.preventDefault();
+        activePlayerRef.current.next();
+        return true;
+      default:
+        return false;
+    }
+  };
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    resetCaretIdleTimer();
+
     if (event.ctrlKey && event.key === "c") {
       event.preventDefault();
       onExit();
       return;
     }
 
-    if (showProjects && projectsOverlayRef.current) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        setShowProjects(false);
-        return;
-      }
-      if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        projectsOverlayRef.current.prevProject();
-        return;
-      }
-      if (event.key === "ArrowRight") {
-        event.preventDefault();
-        projectsOverlayRef.current.nextProject();
-        return;
-      }
-      return;
-    }
-
-    if (showSuggestions) {
-      if (event.key === "ArrowDown") {
-        event.preventDefault();
-        setSelectedIndex((i) => Math.min(i + 1, filteredCommands.length - 1));
-        return;
-      }
-      if (event.key === "ArrowUp") {
-        event.preventDefault();
-        setSelectedIndex((i) => Math.max(i - 1, 0));
-        return;
-      }
-      if (event.key === "Escape") {
-        event.preventDefault();
-        setCurrentLine("");
-        return;
-      }
-      if (event.key === "Enter") {
-        event.preventDefault();
-        executeCommand(filteredCommands[selectedIndex]);
-        setCurrentLine("");
-        return;
-      }
-    }
-
-    // Route arrow keys to the track player when no suggestions are open
-    if (!showSuggestions && activePlayerRef.current) {
-      if (event.key === "ArrowUp") {
-        event.preventDefault();
-        activePlayerRef.current.prev();
-        return;
-      }
-      if (event.key === "ArrowDown") {
-        event.preventDefault();
-        activePlayerRef.current.next();
-        return;
-      }
-    }
+    if (handleProjectsOverlayKeyDown(event)) return;
+    if (handleSuggestionsKeyDown(event)) return;
+    if (handlePlayerKeyDown(event)) return;
 
     if (event.key === "Enter") {
       setCurrentLine("");
@@ -483,10 +518,11 @@ export function TitoOS({ onExit }: Readonly<Props>) {
     setCurrentLine(event.currentTarget.value);
   };
 
-  const handleFocus = () => {
+  const handleFocus = useCallback(() => {
     setFocused(true);
+    resetCaretIdleTimer();
     if (inputRef.current) inputRef.current.focus();
-  };
+  }, [resetCaretIdleTimer]);
 
   const handleBlur = () => {
     requestAnimationFrame(() => {
@@ -498,10 +534,24 @@ export function TitoOS({ onExit }: Readonly<Props>) {
     });
   };
 
+  // Clicking or tapping anywhere in the terminal pane refocuses the hidden
+  // input, mirroring how a native terminal grabs focus.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    container.addEventListener("mousedown", handleFocus);
+    container.addEventListener("touchstart", handleFocus);
+    return () => {
+      container.removeEventListener("mousedown", handleFocus);
+      container.removeEventListener("touchstart", handleFocus);
+    };
+  }, [handleFocus]);
+
   return (
     <div
+      ref={containerRef}
       className="relative flex flex-col text-white bg-neutral-950 w-full h-full font-mono"
-      onMouseDown={handleFocus}
     >
       {/* Output area */}
       <div
@@ -519,7 +569,7 @@ export function TitoOS({ onExit }: Readonly<Props>) {
         <AnimatePresence>
           {showSuggestions && (
             <motion.div
-              className="absolute bottom-full left-0 right-0 pb-2 mb-px bg-neutral-950"
+              className="absolute bottom-full left-0 right-0 pt-2 pb-2 bg-neutral-950"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -608,7 +658,12 @@ export function TitoOS({ onExit }: Readonly<Props>) {
             />
             <span className="text-neutral-400">{currentLine}</span>
             {focused && (
-              <span className="inline-block bg-white w-[10px] h-[1em] animate-caret-blink" />
+              <span
+                className={`inline-block bg-neutral-300 w-[9px] self-start ${
+                  caretBlinking ? "animate-caret-blink" : ""
+                }`}
+                style={{ height: "1.2em" }}
+              />
             )}
           </div>
         </div>

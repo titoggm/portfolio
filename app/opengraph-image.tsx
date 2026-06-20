@@ -7,7 +7,12 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function Image() {
-  const fontData = await readFile(join(process.cwd(), "Menlo-Regular.ttf"));
+  const fontData = await readFile(
+    join(
+      process.cwd(),
+      "node_modules/firacode/distr/ttf/FiraCode-Regular.ttf"
+    )
+  );
 
   return new ImageResponse(
     (
@@ -18,7 +23,7 @@ export default async function Image() {
           display: "flex",
           flexDirection: "column",
           backgroundColor: "#0a0a0a",
-          fontFamily: "Menlo",
+          fontFamily: "Fira Code",
           padding: 72,
         }}
       >
@@ -110,7 +115,7 @@ export default async function Image() {
       ...size,
       fonts: [
         {
-          name: "Menlo",
+          name: "Fira Code",
           data: fontData,
           style: "normal",
         },
