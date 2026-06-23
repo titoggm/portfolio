@@ -7,11 +7,32 @@ import React, {
   useState,
 } from "react";
 import Image from "next/image";
+import { motion } from "motion/react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import DecryptedText from "./DecryptedText";
+import DecryptedText from "./decrypted-text";
 
 const IMAGE_SIZES = "(max-width: 672px) 100vw, 672px";
+
+function Reveal({
+  className,
+  children,
+}: Readonly<{
+  className?: string;
+  children: React.ReactNode;
+}>) {
+  return (
+    <motion.section
+      className={className}
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "0px 0px -80px 0px" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
+      {children}
+    </motion.section>
+  );
+}
 
 interface ProjectSection {
   id: string;
@@ -42,26 +63,21 @@ const PROJECTS: Project[] = [
         content: (
           <div className="space-y-8 text-sm leading-relaxed max-w-2xl">
             {/* Title */}
-            <section className="space-y-1">
-              <h1 className="text-white text-xl">Augmenting myself and my teammates through agentic Content Management System (CMS) workflows</h1>
-              <Image
-                src="/contentful/pai-ready-contentful.png"
-                alt="Rondo agent ready for Contentful tasks"
-                width={1874}
-                height={374}
-                sizes={IMAGE_SIZES}
-                className="w-full h-auto mt-4"
-              />
-              <p className="text-neutral-300 text-xs mt-1 text-center">Rondo PAI ready to do some Contentful work</p>
-            </section>
+            <Reveal className="space-y-1">
+              <h1 className="text-white text-xl">Augmenting my team with agentic Contentful workflows</h1>
+            </Reveal>
 
             {/* The Problem */}
-            <section className="space-y-4">
+            <Reveal className="space-y-4">
               <h2 className="text-white text-base">The Problem</h2>
               <p className="text-neutral-300">
                 I noticed our team was spending a significant amount of time on repetitive,
-                manual work inside our Contentful CMS space. This pulled attention away from
-                higher-impact design work, such as:
+                manual work inside our Contentful CMS space. In fact,{" "}
+                <span className="text-white">
+                  roughly 50% of our team&apos;s capacity was being consumed by these operational
+                  tasks
+                </span>
+                , pulling attention away from higher-impact design work such as:
               </p>
               <ul className="space-y-1 pl-4">
                 {[
@@ -77,29 +93,46 @@ const PROJECTS: Project[] = [
               </ul>
               <p className="text-neutral-300">
                 Our team moves fast and scales pages directly within Contentful. This often
-                means designers have to manually create and manage pages with anywhere from 50
-                to 200 CMS entries per page. Every entry needs to follow specific naming
-                conventions and tagging standards to keep everything organized and maintainable.
+                means designers have to manually create and manage pages containing anywhere
+                from <span className="text-white">50 to 200 CMS entries per page</span>. Every
+                entry must follow specific naming conventions and tagging standards to keep
+                everything organized and maintainable.
               </p>
               <p className="text-neutral-300">
-                When you&apos;re operating at that scale, it quickly turns into a lot of repetitive
-                work that doesn&apos;t necessarily require a designer&apos;s expertise.
+                At this scale, the work quickly becomes highly repetitive and operational in
+                nature. Yet it consumes nearly half of the team&apos;s capacity despite not
+                requiring a designer&apos;s expertise, limiting the time available for more
+                strategic and impactful design work.
               </p>
+
+              <h3 className="text-neutral-300 pt-2">Two approaches to design automation</h3>
               <p className="text-neutral-300">
-                Instead of looking for ways to optimize individual steps in the CMS workflow, I
-                started asking a different question:
+                In my opinion, currently there are two approaches to design automation:
               </p>
-              <p className="text-neutral-400 pl-4 border-l border-neutral-700">
-                How can we give designers a better starting point?
-              </p>
-              <p className="text-neutral-300">
-                Rather than building a system that expects humans to do all the setup work, what
-                would a workflow look like if it was designed for collaboration between humans
-                and AI?
-              </p>
-              <p className="text-neutral-300">
-                Like a tandem bike. Two riders moving together.
-              </p>
+              <ul className="space-y-2 pl-4">
+                <li className="text-neutral-400 flex gap-2">
+                  <span className="text-neutral-600 shrink-0">—</span>
+                  <span>
+                    <span className="text-white">Task automation</span> focuses on speeding up
+                    repetitive and time-consuming work—such as renaming layers, generating
+                    content, or managing layouts—through tools and plugins that save designers
+                    time.
+                  </span>
+                </li>
+                <li className="text-neutral-400 flex gap-2">
+                  <span className="text-neutral-600 shrink-0">—</span>
+                  <span>
+                    <span className="text-white">Creative AI automation</span> acts as a design
+                    companion, using AI to generate ideas, suggest solutions, and even create new
+                    screens based on an existing design system, helping designers explore
+                    possibilities they might not have considered on their own.
+                  </span>
+                </li>
+              </ul>
+
+              <h3 className="text-neutral-300 pt-2">
+                How can we give designers a better starting point within our CMS?
+              </h3>
               <p className="text-neutral-300">
                 The goal isn&apos;t to remove designers from the process. It&apos;s to reduce the amount
                 of time they spend creating entries, filling out fields, and setting up content
@@ -119,32 +152,38 @@ const PROJECTS: Project[] = [
                 inside Contentful. Designers can then review, refine, and finalize the page
                 before it goes live.
               </p>
-            </section>
+            </Reveal>
 
             {/* The Solution */}
-            <section className="space-y-4">
+            <Reveal className="space-y-4">
               <h2 className="text-white text-base">The Solution</h2>
               <p className="text-neutral-300">
-                An easy-to-use Contentful Agent Skill that can be installed by anyone on the team.
+                An easy-to-use custom Contentful Agent Skill that anyone on the team could
+                install and use, regardless of their level of technical familiarity.
               </p>
-              <p className="text-neutral-300">
-                A simple <span className="text-white">/install-hil</span> command that has a primary
-                agent walk the user through setup step-by-step, lowering friction and making
-                adoption easy. Human in the loop install command.
-              </p>
-              <p className="text-neutral-300">
-                This for me was the most important feature. Onboarding teammates as fast as
-                possible. (Shoutout to IndyDevDan for his agentic engineering YouTube videos.)
-              </p>
-              <p className="text-neutral-300">
-                This Contentful Agent Skill is a part of a Personalized AI Infrastructure I&apos;ve
-                been working on. If you&apos;re interested, I highly recommend checking out Daniel
-                Miessler&apos;s work.
-              </p>
-
-              <h3 className="text-neutral-300 pt-2">Some of the workflows in the Contentful Agent Skill</h3>
 
               <div className="space-y-5">
+                <div className="space-y-2">
+                  <p className="text-white">/install-hil</p>
+                  <p className="text-neutral-400">
+                    A simple <span className="text-neutral-300">/install-hil</span> command that
+                    guides the user through the setup process step by step, keeping a human in the
+                    loop and making it easy for anyone on the team to get started.
+                  </p>
+                  <p className="text-neutral-400">
+                    By reducing setup friction to a single command and guided onboarding flow,
+                    teammates could start using the skill immediately without needing to
+                    understand the underlying architecture. (Shoutout to IndyDevDan for his
+                    Agentic Engineering YouTube videos.)
+                  </p>
+                  <p className="text-neutral-400">
+                    The Contentful Agent Skill itself is part of a larger Personalized AI
+                    Infrastructure I&apos;ve been building. I won&apos;t dive into that here, but if
+                    you&apos;re interested in the broader philosophy behind it, I highly recommend
+                    Daniel Miessler&apos;s work.
+                  </p>
+                </div>
+
                 <div className="space-y-2">
                   <p className="text-white">
                     /replicate-entry{" "}
@@ -164,6 +203,87 @@ const PROJECTS: Project[] = [
                     sizes={IMAGE_SIZES}
                     className="w-full h-auto mt-2"
                   />
+
+                  <h4 className="text-neutral-300 pt-2">Tool usage strategy</h4>
+                  <p className="text-neutral-400">
+                    Getting our agent tool strategy right was critical. We intentionally avoided
+                    relying exclusively on the Contentful MCP Server because it introduces
+                    significant token overhead — and tokens translate directly to cost.
+                  </p>
+                  <p className="text-neutral-400">
+                    For example, replicating a content model with 200 entries using only MCP tools
+                    would require:
+                  </p>
+                  <ul className="space-y-1 pl-4">
+                    {["200 get_entry tool calls", "200 create_entry tool calls"].map((item) => (
+                      <li key={item} className="text-neutral-400 flex gap-2">
+                        <span className="text-neutral-600 shrink-0">—</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="text-neutral-400">
+                    That&apos;s <span className="text-white">400 tool calls total</span>, with each
+                    call adding context and consuming tokens.
+                  </p>
+                  <p className="text-neutral-400">
+                    Instead, we adopted a hybrid approach:
+                  </p>
+                  <ol className="space-y-2 pl-4">
+                    <li className="text-neutral-400 flex gap-2">
+                      <span className="text-neutral-600 shrink-0">1.</span>
+                      <span>
+                        <span className="text-white">
+                          Fetch an entry snapshot via the Contentful APIs.
+                        </span>{" "}
+                        The entire set of entries is retrieved as JSON in a small number of API
+                        requests instead of hundreds of get_entry tool calls.
+                      </span>
+                    </li>
+                    <li className="text-neutral-400 flex gap-2">
+                      <span className="text-neutral-600 shrink-0">2.</span>
+                      <span>
+                        <span className="text-white">
+                          Build a dependency-aware execution plan.
+                        </span>{" "}
+                        The snapshot is analyzed and broken into execution waves based on entry
+                        references.
+                      </span>
+                    </li>
+                    <li className="text-neutral-400 flex gap-2">
+                      <span className="text-neutral-600 shrink-0">3.</span>
+                      <span>
+                        <span className="text-white">Execute waves from the bottom up.</span>{" "}
+                        Entries with no dependencies are created first. Once those entries exist,
+                        the next wave of entries that reference them can be created. This continues
+                        until the final wave creates the top-level parent entries.
+                      </span>
+                    </li>
+                    <li className="text-neutral-400 flex gap-2">
+                      <span className="text-neutral-600 shrink-0">4.</span>
+                      <span>
+                        <span className="text-white">
+                          Run entry creation subagents in parallel.
+                        </span>{" "}
+                        Within each wave, multiple subagents create entries concurrently using the
+                        create_entry MCP tool.
+                      </span>
+                    </li>
+                  </ol>
+
+                  <h4 className="text-neutral-300 pt-2">Why the hybrid approach?</h4>
+                  <p className="text-neutral-400">
+                    APIs are better suited for retrieving large amounts of data, while MCP tools
+                    are better suited for performing actions. Combining the two cuts tool usage by{" "}
+                    <span className="text-white">50%</span> (400 → 200 for a 200-entry
+                    replication) and supports parallel, dependency-aware execution.
+                  </p>
+                  <p className="text-neutral-400">
+                    Fewer tool calls means fewer tokens, and fewer tokens means lower cost.{" "}
+                    <span className="text-white">
+                      Replicating a page with 100 entries runs roughly $0.22 on Claude Sonnet 4.6.
+                    </span>
+                  </p>
                 </div>
 
                 <div className="space-y-2">
@@ -223,26 +343,7 @@ const PROJECTS: Project[] = [
                   </p>
                 </div>
               </div>
-            </section>
-
-            {/* What's Next */}
-            <section className="space-y-4">
-              <h2 className="text-white text-base">What&apos;s Next</h2>
-              <p className="text-neutral-300">
-                As designers continue using the Contentful Skill, we&apos;re expanding the system
-                with additional workflows.
-              </p>
-              <p className="text-neutral-300">
-                One example currently in progress is a color-selection workflow, where agents
-                help choose appropriate colors based on the entry&apos;s purpose and context. This
-                gives designers an even stronger starting point and reduces repetitive
-                decision-making inside the CMS.
-              </p>
-              <p className="text-neutral-300">
-                Over time, the goal is to continue removing operational friction so designers
-                can focus more on creative and strategic work, and less on the repetitive tasks.
-              </p>
-            </section>
+            </Reveal>
           </div>
         ),
       },
@@ -259,18 +360,18 @@ const PROJECTS: Project[] = [
         label: "Case Study",
         content: (
           <div className="space-y-8 text-sm leading-relaxed max-w-2xl">
-            <section className="space-y-1">
+            <Reveal className="space-y-1">
               <h1 className="text-white text-xl">Nave Bank Card Design</h1>
-            </section>
+            </Reveal>
 
             {/* Final Designs */}
-            <section className="space-y-4">
+            <Reveal className="space-y-4">
 
               <div className="space-y-6">
                 <div className="space-y-2">
                   <p className="text-neutral-400 text-xs">Black Metal with Purpura</p>
                   <Image
-                    src="/nave-bank/card-black-metal-purpura.jpg"
+                    src="/nave-bank/black-metal-purpura-new.jpg"
                     alt="Nave Bank card design — Black metal with Purpura"
                     width={1920}
                     height={1080}
@@ -303,10 +404,10 @@ const PROJECTS: Project[] = [
                   />
                 </div>
               </div>
-            </section>
+            </Reveal>
 
             {/* Market Research */}
-            <section className="space-y-4">
+            <Reveal className="space-y-4">
               <h2 className="text-white text-base">Market Research</h2>
               <p className="text-neutral-300">
                 Looked at local banks in Puerto Rico, larger US banks, and a few Neobanks.
@@ -329,10 +430,10 @@ const PROJECTS: Project[] = [
                   className="w-full h-auto"
                 />
               </div>
-            </section>
+            </Reveal>
 
             {/* Inspo / Sketches */}
-            <section className="space-y-4">
+            <Reveal className="space-y-4">
               <h2 className="text-white text-base">Inspo / Sketches</h2>
               <p className="text-neutral-300">
                 Started by looking at spaces where light does all the talking. The work of artists
@@ -351,10 +452,10 @@ const PROJECTS: Project[] = [
                 sizes={IMAGE_SIZES}
                 className="w-full h-auto"
               />
-            </section>
+            </Reveal>
 
             {/* Ideation */}
-            <section className="space-y-4">
+            <Reveal className="space-y-4">
               <h2 className="text-white text-base">Ideation</h2>
               <p className="text-neutral-300">
                 When ideating I like to start with a blank page and let myself go. Not worrying
@@ -368,10 +469,10 @@ const PROJECTS: Project[] = [
                 sizes={IMAGE_SIZES}
                 className="w-full h-auto"
               />
-            </section>
+            </Reveal>
 
             {/* Thank You */}
-            <section>
+            <Reveal>
               <Image
                 src="/nave-bank/thank-you.jpg"
                 alt="Thank you — Nave Bank Design Intern"
@@ -380,7 +481,7 @@ const PROJECTS: Project[] = [
                 sizes={IMAGE_SIZES}
                 className="w-full h-auto"
               />
-            </section>
+            </Reveal>
           </div>
         ),
       },
@@ -470,7 +571,7 @@ export const ProjectsOverlay = forwardRef<
 
           {/* Content area */}
           <ScrollArea className="flex-1 min-h-0">
-            <div className="pl-4 pr-6 py-6">{section.content}</div>
+            <div className="px-4 sm:px-6 py-6 flex justify-center">{section.content}</div>
           </ScrollArea>
 
           {/* Bottom hint bar */}

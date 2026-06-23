@@ -15,7 +15,7 @@ export default function PortfolioTerminal() {
           <p className="text-neutral-400 mb-2">Available commands:</p>
           <div className="grid grid-cols-[80px_1fr] gap-x-4 gap-y-1">
             <span className="text-white font-semibold">tito</span>
-            <span className="text-neutral-400">TG9 v1.0 — A terminal tool for exploring Tito&apos;s work, thinking, interests, and background.</span>
+            <span className="text-neutral-400">TG9 v1.1.192</span>
             <span className="text-white font-semibold">clear</span>
             <span className="text-neutral-400">Clear the terminal</span>
             <span className="text-white font-semibold">help</span>
