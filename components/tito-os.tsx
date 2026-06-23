@@ -54,7 +54,7 @@ const COMMANDS: CLICommand[] = [
 ];
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/titoggm";
-const RESUME_URL = "/resume.pdf";
+const RESUME_URL = "/tg9-resume.pdf";
 const EMAIL = "titogm9@gmail.com";
 
 // ---------------------------------------------------------------------------
@@ -356,6 +356,12 @@ export function TitoOS({ onExit }: Readonly<Props>) {
             >
               {RESUME_URL}
             </a>
+          </span>
+        );
+        appendOutput(
+          <span className="text-neutral-500 text-sm">
+            ps — the resume has my full name, but friends, coworkers, and
+            this terminal call me Tito.
           </span>
         );
         break;
