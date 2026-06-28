@@ -587,6 +587,7 @@ export function TitoOS({ onExit }: Readonly<Props>) {
                   <button
                     key={cmd.name}
                     type="button"
+                    onMouseEnter={() => setSelectedIndex(i)}
                     onMouseDown={(event) => {
                       event.preventDefault();
                       executeCommand(cmd);

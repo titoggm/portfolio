@@ -3,8 +3,8 @@ import { Analytics } from "@vercel/analytics/next";
 import "firacode/distr/fira_code.css";
 import "./globals.css";
 
-const SITE_URL = "https://titogarcia999.dev";
-const SITE_NAME = "titogarcia999.dev";
+const SITE_URL = "https://titogarcia.dev";
+const SITE_NAME = "titogarcia.dev";
 const SITE_DESCRIPTION =
   "Tito Garcia — an interdisciplinary product designer working across design, AI, and engineering.";
 
@@ -45,8 +45,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased dark">
-      <body className="min-h-full flex flex-col">
+    <html lang="en" className="h-full overflow-hidden overscroll-none antialiased dark">
+      <body className="h-full overflow-hidden overscroll-none flex flex-col">
         {children}
         <Analytics />
       </body>
