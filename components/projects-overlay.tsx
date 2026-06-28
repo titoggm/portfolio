@@ -7,7 +7,6 @@ import React, {
   useState,
 } from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import DecryptedText from "./decrypted-text";
@@ -21,17 +20,7 @@ function Reveal({
   className?: string;
   children: React.ReactNode;
 }>) {
-  return (
-    <motion.section
-      className={className}
-      initial={{ opacity: 0, y: 32 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -80px 0px" }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-    >
-      {children}
-    </motion.section>
-  );
+  return <section className={className}>{children}</section>;
 }
 
 interface ProjectSection {
@@ -63,7 +52,7 @@ const PROJECTS: Project[] = [
         content: (
           <div className="space-y-8 text-sm leading-relaxed max-w-2xl">
             {/* Title */}
-            <Reveal className="space-y-1">
+            <Reveal className="space-y-1 pt-6">
               <h1 className="text-white text-xl">Augmenting my team with agentic Contentful workflows</h1>
             </Reveal>
 
@@ -360,7 +349,7 @@ const PROJECTS: Project[] = [
         label: "Case Study",
         content: (
           <div className="space-y-8 text-sm leading-relaxed max-w-2xl">
-            <Reveal className="space-y-1">
+            <Reveal className="space-y-1 pt-6">
               <h1 className="text-white text-xl">Nave Bank Card Design</h1>
             </Reveal>
 

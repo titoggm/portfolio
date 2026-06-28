@@ -170,7 +170,7 @@ export const Terminal = ({
       onClick={handleFocusInput} // NOSONAR typescript:S6848
     >
       {/* Output */}
-      <div className="overflow-y-auto pt-2 px-4" ref={wrapperRef}>
+      <div className="overflow-y-auto overscroll-contain pt-2 px-4" ref={wrapperRef}>
         <TypeAnimation speed={90} cursor={false} sequence={[initialFeed]} />
         {output.map((line, index) => getPrompt(line, index))}
         <div className="flex relative">
