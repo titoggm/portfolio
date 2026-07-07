@@ -353,8 +353,27 @@ const PROJECTS: Project[] = [
               <h1 className="text-white text-xl">Nave Bank Card Design</h1>
             </Reveal>
 
+            {/* Physical Prototype */}
+            <Reveal className="space-y-4">
+              <h2 className="text-white text-base">Physical Prototype</h2>
+              <div className="space-y-2">
+                <p className="text-neutral-400 text-xs">
+                  Charcoal — Plastic material · the card we shipped
+                </p>
+                <Image
+                  src="/nave-bank/credit-card-live.jpg"
+                  alt="Nave Bank card — physical Charcoal plastic prototype held in hand"
+                  width={3000}
+                  height={2249}
+                  sizes={IMAGE_SIZES}
+                  className="w-full h-auto"
+                />
+              </div>
+            </Reveal>
+
             {/* Final Designs */}
             <Reveal className="space-y-4">
+              <h2 className="text-white text-base">Final Designs</h2>
 
               <div className="space-y-6">
                 <div className="space-y-2">
