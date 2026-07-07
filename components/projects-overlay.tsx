@@ -472,10 +472,10 @@ const PROJECTS: Project[] = [
                 about perfection, just getting as many ideas down as possible. Should be a mess.
               </p>
               <Image
-                src="/nave-bank/ideation.jpg"
+                src="/nave-bank/ideation-v2.jpg"
                 alt="Ideation sketches"
-                width={1344}
-                height={978}
+                width={2000}
+                height={1504}
                 sizes={IMAGE_SIZES}
                 className="w-full h-auto"
               />
