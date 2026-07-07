@@ -189,6 +189,7 @@ const PROJECTS: Project[] = [
                     alt="replicate-entry workflow"
                     width={972}
                     height={114}
+                    priority
                     sizes={IMAGE_SIZES}
                     className="w-full h-auto mt-2"
                   />
@@ -361,10 +362,11 @@ const PROJECTS: Project[] = [
                   Charcoal — Plastic material · the card we shipped
                 </p>
                 <Image
-                  src="/nave-bank/credit-card-live.jpg"
+                  src="/nave-bank/physical-credit-card.jpg"
                   alt="Nave Bank card — physical Charcoal plastic prototype held in hand"
-                  width={3000}
-                  height={2249}
+                  width={1344}
+                  height={1008}
+                  priority
                   sizes={IMAGE_SIZES}
                   className="w-full h-auto"
                 />
@@ -470,10 +472,10 @@ const PROJECTS: Project[] = [
                 about perfection, just getting as many ideas down as possible. Should be a mess.
               </p>
               <Image
-                src="/nave-bank/ideation.png"
+                src="/nave-bank/ideation.jpg"
                 alt="Ideation sketches"
-                width={1896}
-                height={1380}
+                width={1344}
+                height={978}
                 sizes={IMAGE_SIZES}
                 className="w-full h-auto"
               />
