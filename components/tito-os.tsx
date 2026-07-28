@@ -36,10 +36,6 @@ const COMMANDS: CLICommand[] = [
     description: "View selected projects and creative work by Tito",
   },
   {
-    name: "prime-resume",
-    description: "View Tito's resume",
-  },
-  {
     name: "prime-linkedin",
     description: "View Tito's LinkedIn profile",
   },
@@ -54,7 +50,6 @@ const COMMANDS: CLICommand[] = [
 ];
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/titoggm";
-const RESUME_URL = "/tg9-resume.pdf";
 const EMAIL = "titogm9@gmail.com";
 
 // ---------------------------------------------------------------------------
@@ -332,8 +327,6 @@ export function TitoOS({ onExit }: Readonly<Props>) {
             <span className="text-neutral-400">/prime-linkedin</span>
             {" · "}
             <span className="text-neutral-400">/prime-email</span>
-            {" · "}
-            <span className="text-neutral-400">/prime-resume</span>
           </span>,
           <span key="gap-5" className="block h-3" />,
         ];
@@ -342,29 +335,6 @@ export function TitoOS({ onExit }: Readonly<Props>) {
         });
         break;
       }
-
-      case "prime-resume":
-        window.open(RESUME_URL, "_blank", "noopener,noreferrer");
-        appendOutput(
-          <span className="text-neutral-300">
-            Opening resume...{" "}
-            <a
-              href={RESUME_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline text-white hover:text-neutral-300"
-            >
-              {RESUME_URL}
-            </a>
-          </span>
-        );
-        appendOutput(
-          <span className="text-neutral-500 text-sm">
-            ps — the resume has my full name, but friends, coworkers, and
-            this terminal call me Tito.
-          </span>
-        );
-        break;
 
       case "prime-track-ids": {
         if (playerActive) {
