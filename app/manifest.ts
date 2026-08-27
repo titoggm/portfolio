@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "titogarcia.dev — Tito Garcia",
-    short_name: "titogarcia.dev",
+    name: "Tito Garcia's Portfolio",
+    short_name: "Tito Garcia's Portfolio",
     description:
-      "Tito Garcia — an AI-Native Product Designer working across design and engineering.",
+      "AI-Native Product Designer working across design and engineering.",
     start_url: "/",
     display: "standalone",
     background_color: "#0a0a0a",

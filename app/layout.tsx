@@ -11,19 +11,19 @@ const firaCode = Fira_Code({
 });
 
 const SITE_URL = "https://titogarcia.dev";
-const SITE_NAME = "Tito Garcia's Portfolio — an AI-Native Product Designer working across design and engineering.";
+const SITE_NAME = "Tito Garcia's Portfolio";
 const SITE_DESCRIPTION =
-  "Tito Garcia's Portfolio — an AI-Native Product Designer working across design and engineering.";
+  "AI-Native Product Designer working across design and engineering.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Tito Garcia`,
+    default: `${SITE_NAME}`,
     template: `%s — ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   openGraph: {
-    title: `${SITE_NAME} — Tito Garcia`,
+    title: `${SITE_NAME}`,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: SITE_NAME,
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} — Tito Garcia`,
+    title: `${SITE_NAME}`,
     description: SITE_DESCRIPTION,
     images: ["/opengraph-image"],
   },
