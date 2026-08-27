@@ -86,7 +86,7 @@ export default async function Image() {
               color: "#a3a3a3",
             }}
           >
-            Product Designer — design, AI, engineering
+            AI-Native Product Designer
           </div>
         </div>
 

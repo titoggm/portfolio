@@ -1,12 +1,19 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import "firacode/distr/fira_code.css";
+import { Fira_Code } from "next/font/google";
 import "./globals.css";
 
+const firaCode = Fira_Code({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-fira-code",
+});
+
 const SITE_URL = "https://titogarcia.dev";
-const SITE_NAME = "titogarcia.dev";
+const SITE_NAME = "Tito Garcia's Portfolio — an AI-Native Product Designer working across design and engineering.";
 const SITE_DESCRIPTION =
-  "Tito Garcia — an interdisciplinary product designer working across design, AI, and engineering.";
+  "Tito Garcia's Portfolio — an AI-Native Product Designer working across design and engineering.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -45,7 +52,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full overflow-hidden overscroll-none antialiased dark">
+    <html
+      lang="en"
+      className={`${firaCode.variable} h-full overflow-hidden overscroll-none antialiased dark`}
+    >
       <body className="h-full overflow-hidden overscroll-none flex flex-col">
         {children}
         <Analytics />
