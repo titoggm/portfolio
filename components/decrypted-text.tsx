@@ -274,10 +274,12 @@ export default function DecryptedText({
     if (isAnimating) return;
     setRevealedIndices(new Set());
     setIsDecrypted(false);
-    setDisplayText(text);
+    // Scramble on this frame rather than waiting out the first interval tick,
+    // so the effect starts in step with whatever else the hover triggers.
+    setDisplayText(shuffleText(text, new Set()));
     setDirection('forward');
     setIsAnimating(true);
-  }, [isAnimating, text]);
+  }, [isAnimating, shuffleText, text]);
 
   const resetToPlainText = useCallback(() => {
     clearInterval(intervalRef.current ?? undefined);

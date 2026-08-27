@@ -1,20 +1,18 @@
 "use client";
 
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
-import { ChevronDown, ChevronRight, ChevronUp } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
-import DecryptedText from "./decrypted-text";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-  ProjectsOverlay,
-  type ProjectsOverlayHandle,
-} from "./projects-overlay";
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  ChevronRight,
+} from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { TRACKS } from "@/lib/tracks";
+import DecryptedText from "./decrypted-text";
+import { ProjectCards } from "./project-cards";
+import { SEEK_STEP, TrackPlayer, type TrackPlayerHandle } from "./track-player";
 
 interface CLICommand {
   name: string;
@@ -49,177 +47,48 @@ const COMMANDS: CLICommand[] = [
   },
 ];
 
+const ABOUT_PROSE =
+  "block max-w-[76ch] text-neutral-300 leading-relaxed";
+
 const LINKEDIN_URL = "https://www.linkedin.com/in/titoggm";
 const EMAIL = "titogm9@gmail.com";
 
 // ---------------------------------------------------------------------------
-// Track player
+// TitoOS
 // ---------------------------------------------------------------------------
 
-interface Track {
-  src: string;
-  title: string;
-  artist: string;
-  start?: number; // start time in seconds
-}
+const HINT_ICON = "inline-block size-[1em] shrink-0";
 
-const TRACKS: Track[] = [
-  {
-    src: "https://www.youtube.com/embed/PHEbmPRBuU8?si=Lf8eVViO19JAHkVP",
-    title: "Spirit Wave",
-    artist: "Mall Grab",
-  },
-  {
-    src: "https://www.youtube.com/embed/8tkFXU2xS6Q?si=OoeFKNAUOi72z5nZ",
-    title: "Builded Mind",
-    artist: "Ron Obvious",
-    start: 108,
-  },
-  {
-    src: "https://www.youtube.com/embed/os9WVfGR6uE?si=RcnQAsPDWai8DYB2",
-    title: "The Only Girl",
-    artist: "Faster Horses",
-  },
-  {
-    src: "https://www.youtube.com/embed/yxW3R2us0r0?si=UsrJWi6gbvKlaKGq",
-    title: "Slow Burner (Effy Remix)",
-    artist: "Interplanetary Criminal, Effy",
-  },
-  {
-    src: "https://www.youtube.com/embed/W_LlRsvdebI?si=3qI0yx4oi3xOxNHT",
-    title: "Make You Whole (Dusky Remix)",
-    artist: "Andronicus, Dusky",
-  },
-  {
-    src: "https://www.youtube.com/embed/xJIYF6KwK3w?si=_MSN0QpDEz5GNfiX",
-    title: "Dreams",
-    artist: "Prospa",
-  },
-  {
-    src: "https://www.youtube.com/embed/-1PgQkGPQXE?si=tm0RhUXFeyXFZ4QB",
-    title: "More Than I Can Take (Y Tribe Instrumental)",
-    artist: "Absolute",
-  },
-  {
-    src: "https://www.youtube.com/embed/dp2BhqQtenc?si=Ql9cel6t1tJw8Dce",
-    title: "Salzburg",
-    artist: "Sam Alfred",
-  },
-  {
-    src: "https://www.youtube.com/embed/_14ZfyhB_ew?si=MrmiY4KDr01u_Mi8",
-    title: "Don't Hurt Me",
-    artist: "Cache",
-  },
-  {
-    src: "https://www.youtube.com/embed/hoFhIm4ppnA?si=oPXE4mwiOqApkR78",
-    title: "Everywhere",
-    artist: "Lxury",
-  },
-  {
-    src: "https://www.youtube.com/embed/wuRXPhrABJY?si=GVf3Vt0tMTKai8XS",
-    title: "Aqueous Regression",
-    artist: "Dakpa",
-  },
-  {
-    src: "https://www.youtube.com/embed/wuRXPhrABJY?si=GVf3Vt0tMTKai8XS",
-    title: "Aqueous Regression",
-    artist: "Dakpa",
-  },
-];
-
-interface TrackPlayerHandle {
-  next: () => void;
-  prev: () => void;
-}
-
-function TrackEmbed({ track }: { readonly track: Track }) {
-  const [loaded, setLoaded] = useState(false);
-
-  let src = track.src;
-  if (track.start) {
-    const separator = track.src.includes("?") ? "&" : "?";
-    src = `${track.src}${separator}start=${track.start}`;
-  }
-
+/**
+ * The key hints for the track player. The arrows are icons rather than ↑ ↓ ← →
+ * characters because the Fira Code subset the site loads has no arrow glyphs —
+ * those fall back to a system face that draws them far longer than the text
+ * around them. Lucide's arrows are SVG, so they scale with the font size.
+ */
+function PlayerHints() {
   return (
-    <div className="relative w-full h-[300px] bg-neutral-950 overflow-hidden border border-b-0 border-neutral-800">
-      <iframe
-        title={`Track player for ${track.title}`}
-        src={src}
-        width="100%"
-        height="300"
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture; accelerometer; gyroscope; web-share"
-        loading="lazy"
-        onLoad={() => setLoaded(true)}
-        className={`block transition-opacity duration-300 ${
-          loaded ? "opacity-100" : "opacity-0"
-        }`}
-        style={{ border: 0 }}
-      />
-    </div>
+    <span className="inline-flex items-center gap-1 align-middle">
+      <ArrowUp className={HINT_ICON} aria-hidden="true" />
+      <ArrowDown className={HINT_ICON} aria-hidden="true" />
+      <span className="sr-only">up and down arrows</span>
+      <span>tracks</span>
+      <span aria-hidden="true">·</span>
+      <span>space play/pause</span>
+      <span aria-hidden="true">·</span>
+      <ArrowLeft className={HINT_ICON} aria-hidden="true" />
+      <ArrowRight className={HINT_ICON} aria-hidden="true" />
+      <span className="sr-only">left and right arrows</span>
+      <span>seek</span>
+    </span>
   );
 }
 
-const TrackPlayer = forwardRef<TrackPlayerHandle, { tracks: Track[] }>(
-  ({ tracks }, ref) => {
-    const [index, setIndex] = useState(0);
-
-    const next = useCallback(
-      () => setIndex((i) => Math.min(i + 1, tracks.length - 1)),
-      [tracks.length]
-    );
-    const prev = useCallback(() => setIndex((i) => Math.max(i - 1, 0)), []);
-
-    useImperativeHandle(ref, () => ({ next, prev }), [next, prev]);
-
-    const track = tracks[index];
-
-    return (
-      <div className="py-2">
-        {/* Full-width embed */}
-        <TrackEmbed key={track.src} track={track} />
-
-        {/* Caption bar */}
-        <div className="border border-t-0 border-neutral-800 px-3 py-4 flex items-center justify-between">
-          <div className="flex flex-col gap-2">
-            <span className="text-white text-sm leading-none">{track.title}</span>
-            <span className="text-neutral-500 text-xs leading-none">{track.artist}</span>
-          </div>
-          <div className="flex items-center gap-3 text-xs text-neutral-600 shrink-0">
-            <span>
-              {String(index + 1).padStart(2, "0")} / {String(tracks.length).padStart(2, "0")}
-            </span>
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={prev}
-                disabled={index === 0}
-                aria-label="Previous track"
-                className="p-1 disabled:opacity-30 enabled:hover:text-white enabled:cursor-pointer"
-              >
-                <ChevronUp size={14} />
-              </button>
-              <button
-                type="button"
-                onClick={next}
-                disabled={index === tracks.length - 1}
-                aria-label="Next track"
-                className="p-1 disabled:opacity-30 enabled:hover:text-white enabled:cursor-pointer"
-              >
-                <ChevronDown size={14} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-);
-TrackPlayer.displayName = "TrackPlayer";
-
-// ---------------------------------------------------------------------------
-// TitoOS
-// ---------------------------------------------------------------------------
+// True while the user has an actual highlight on the page (a drag that covered
+// text), as opposed to a plain collapsed caret.
+function hasTextSelection(): boolean {
+  const selection = window.getSelection();
+  return !!selection && !selection.isCollapsed && selection.toString() !== "";
+}
 
 interface OutputItem {
   id: number;
@@ -230,23 +99,20 @@ const INITIAL_OUTPUT: OutputItem[] = [
   {
     id: 1,
     node: (
-      <p className="text-neutral-300">
-        TG9 v1.1.192 
-      </p>
+      <div className="text-neutral-300">
+        <p>TG9 v1.1.192</p>
+        <p>Tito Garcia</p>
+        <p>Welcome to my personal portfolio</p>
+      </div>
     ),
   },
 ];
 
-interface Props {
-  readonly onExit: () => void;
-}
-
-export function TitoOS({ onExit }: Readonly<Props>) {
+export function TitoOS() {
   const [focused, setFocused] = useState(true);
   const [currentLine, setCurrentLine] = useState("/");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [playerActive, setPlayerActive] = useState(false);
-  const [showProjects, setShowProjects] = useState(false);
   const [output, setOutput] = useState<OutputItem[]>(INITIAL_OUTPUT);
   const [caretBlinking, setCaretBlinking] = useState(false);
 
@@ -255,8 +121,8 @@ export function TitoOS({ onExit }: Readonly<Props>) {
   const containerRef = useRef<HTMLDivElement>(null);
   const nextId = useRef(2);
   const activePlayerRef = useRef<TrackPlayerHandle | null>(null);
-  const projectsOverlayRef = useRef<ProjectsOverlayHandle | null>(null);
   const caretIdleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pointerDownRef = useRef(false);
 
   // Real terminals hold the caret solid while you type and only resume
   // blinking once you've paused, instead of blinking on every keystroke.
@@ -296,39 +162,48 @@ export function TitoOS({ onExit }: Readonly<Props>) {
       case "prime-about": {
         const lines: React.ReactNode[] = [
           <span key="gap-0" className="block h-2" />,
-          <span key="name-1" className="text-white text-[15px]">
-            Tito Garcia
-          </span>,
-          <span key="gap-1" className="block h-2" />,
-          <span key="bio-1" className="text-neutral-300 leading-relaxed">
-            I was born in Puerto Rico and grew up in Boston, Massachusetts.
+          <span key="bio-1" className={ABOUT_PROSE}>
+            Hey, I’m Tito, an AI-Native Product Designer from Puerto Rico
+            and Boston, Massachusetts.
           </span>,
           <span key="gap-1b" className="block h-2" />,
-          <span key="bio-2" className="text-neutral-300 leading-relaxed">
-            Creativity, curiosity, and interdisciplinarity guide how I work.
+          <span key="bio-2" className={ABOUT_PROSE}>
+            I enjoy thinking in systems and creating efficient, high-quality
+            design workflows that help create and scale thoughtful product
+            experiences. I focus on understanding where AI can replace a
+            designer’s effort and where a designer’s judgment remains
+            irreplaceable.
           </span>,
           <span key="gap-2" className="block h-2" />,
-          <span key="bio-3" className="text-neutral-300 leading-relaxed">
-            I come from a background of different cultures and exploration
-            across domains such as computer science, design, psychology, and
-            architecture, which have shaped my taste and the way I think and
-            solve problems as a builder and creative.
+          <span key="bio-3" className={ABOUT_PROSE}>
+            I’ve always been drawn to different disciplines, from design and
+            computer science to psychology and architecture. Exploring them has
+            shaped my taste, how I approach problems, and ultimately how I’ve
+            grown into both a creative and a builder.
           </span>,
           <span key="gap-3" className="block h-2" />,
-          <span key="bio-4" className="text-neutral-300 leading-relaxed">
-            I work at the intersection of design, AI, and engineering. I
-            enjoy creating systems and user experiences designed for human
-            and AI collaboration. What excites me most is combining strong
-            design principles with agentic design and engineering skills to
-            optimize design and code workflows.
+          <span key="bio-4" className={ABOUT_PROSE}>
+            Run <span className="text-neutral-400">/prime-projects</span> to see
+            some of my favourite work.
           </span>,
           <span key="gap-4" className="block h-2" />,
-          <span key="reach-1" className="text-neutral-300">
-            <span className="text-neutral-400">/prime-linkedin</span>
-            {" · "}
-            <span className="text-neutral-400">/prime-email</span>
+          <span key="bio-5" className={ABOUT_PROSE}>
+            Outside of design, I’m a music collector and selector, digging
+            through vinyl crates, YouTube, and Bandcamp for house and UK garage
+            tracks. The best part is finding hidden gems that don’t have much
+            of an audience but are seriously good. Run{" "}
+            <span className="text-neutral-400">/prime-track-ids</span> to listen
+            to some of what I’m currently listening to.
           </span>,
-          <span key="gap-5" className="block h-3" />,
+          <span key="gap-5" className="block h-2" />,
+          <span key="reach-1" className={ABOUT_PROSE}>
+            If you’re working on something interesting, want to talk design or
+            AI, or just want to say hi, run{" "}
+            <span className="text-neutral-400">/prime-linkedin</span> or{" "}
+            <span className="text-neutral-400">/prime-email</span>. Always down
+            to connect and build something cool.
+          </span>,
+          <span key="gap-6" className="block h-3" />,
         ];
         lines.forEach((node, i) => {
           setTimeout(() => appendOutput(node), i * 60);
@@ -340,7 +215,7 @@ export function TitoOS({ onExit }: Readonly<Props>) {
         if (playerActive) {
           appendOutput(
             <span className="text-neutral-500">
-              player already running — use ↑ ↓ to navigate tracks.
+              player already running — <PlayerHints />
             </span>
           );
           break;
@@ -383,7 +258,12 @@ export function TitoOS({ onExit }: Readonly<Props>) {
         break;
 
       case "prime-projects":
-        setShowProjects(true);
+        appendOutput(<ProjectCards />);
+        appendOutput(
+          <span className="block pb-2 text-neutral-500">
+            adding more of my projects soon — T
+          </span>
+        );
         break;
 
       case "clear":
@@ -401,29 +281,22 @@ export function TitoOS({ onExit }: Readonly<Props>) {
     }
   }, [output]);
 
-  useEffect(() => {
-    if (inputRef.current) inputRef.current.focus();
+  // The caret is drawn as a span after the text, so the input's real selection
+  // has to sit at the end too. A bare .focus() puts it at index 0, where
+  // backspace has nothing to its left and the leading "/" can't be deleted.
+  const focusInputAtEnd = useCallback(() => {
+    const input = inputRef.current;
+    if (!input) return;
+    input.focus();
+    const end = input.value.length;
+    input.setSelectionRange(end, end);
   }, []);
 
+  useEffect(() => {
+    focusInputAtEnd();
+  }, [focusInputAtEnd]);
+
   // Returns true once a handler has fully handled (and should stop) the event.
-  const handleProjectsOverlayKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ): boolean => {
-    if (!showProjects || !projectsOverlayRef.current) return false;
-
-    if (event.key === "Escape") {
-      event.preventDefault();
-      setShowProjects(false);
-    } else if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      projectsOverlayRef.current.prevProject();
-    } else if (event.key === "ArrowRight") {
-      event.preventDefault();
-      projectsOverlayRef.current.nextProject();
-    }
-    return true;
-  };
-
   const handleSuggestionsKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
   ): boolean => {
@@ -452,20 +325,36 @@ export function TitoOS({ onExit }: Readonly<Props>) {
     }
   };
 
-  // Route arrow keys to the track player when no suggestions are open
+  // Drive the track player from the command line whenever no suggestions are
+  // open. Space is only claimed on an empty line so it stays a plain character
+  // while a command is being typed.
   const handlePlayerKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
   ): boolean => {
-    if (showSuggestions || !activePlayerRef.current) return false;
+    const player = activePlayerRef.current;
+    if (showSuggestions || !player) return false;
 
     switch (event.key) {
       case "ArrowUp":
         event.preventDefault();
-        activePlayerRef.current.prev();
+        player.prev();
         return true;
       case "ArrowDown":
         event.preventDefault();
-        activePlayerRef.current.next();
+        player.next();
+        return true;
+      case "ArrowLeft":
+        event.preventDefault();
+        player.seekBy(-SEEK_STEP);
+        return true;
+      case "ArrowRight":
+        event.preventDefault();
+        player.seekBy(SEEK_STEP);
+        return true;
+      case " ":
+        if (currentLine !== "") return false;
+        event.preventDefault();
+        player.toggle();
         return true;
       default:
         return false;
@@ -475,13 +364,6 @@ export function TitoOS({ onExit }: Readonly<Props>) {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     resetCaretIdleTimer();
 
-    if (event.ctrlKey && event.key === "c") {
-      event.preventDefault();
-      onExit();
-      return;
-    }
-
-    if (handleProjectsOverlayKeyDown(event)) return;
     if (handleSuggestionsKeyDown(event)) return;
     if (handlePlayerKeyDown(event)) return;
 
@@ -497,13 +379,20 @@ export function TitoOS({ onExit }: Readonly<Props>) {
   const handleFocus = useCallback(() => {
     setFocused(true);
     resetCaretIdleTimer();
-    if (inputRef.current) inputRef.current.focus();
-  }, [resetCaretIdleTimer]);
+    focusInputAtEnd();
+  }, [resetCaretIdleTimer, focusInputAtEnd]);
 
   const handleBlur = () => {
+    // A press blurs the input before the drag has selected anything, so the
+    // selection can't be consulted yet — refocusing here would cancel the drag
+    // in progress. The pointer-up handler below restores focus instead.
+    if (pointerDownRef.current) {
+      setFocused(false);
+      return;
+    }
     requestAnimationFrame(() => {
-      if (inputRef.current && document.hasFocus()) {
-        inputRef.current.focus();
+      if (inputRef.current && document.hasFocus() && !hasTextSelection()) {
+        focusInputAtEnd();
       } else {
         setFocused(false);
       }
@@ -511,16 +400,33 @@ export function TitoOS({ onExit }: Readonly<Props>) {
   };
 
   // Clicking or tapping anywhere in the terminal pane refocuses the hidden
-  // input, mirroring how a native terminal grabs focus.
+  // input, mirroring how a native terminal grabs focus. Focus is taken on
+  // release rather than press, and only when the gesture didn't highlight
+  // anything, so a click-drag can select output text and keep it.
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    container.addEventListener("mousedown", handleFocus);
-    container.addEventListener("touchstart", handleFocus);
+    const handlePress = () => {
+      pointerDownRef.current = true;
+    };
+    // Bound to the window: a drag often ends outside the pane it started in.
+    const handleRelease = () => {
+      if (!pointerDownRef.current) return;
+      pointerDownRef.current = false;
+      if (hasTextSelection()) return;
+      handleFocus();
+    };
+
+    container.addEventListener("mousedown", handlePress);
+    container.addEventListener("touchstart", handlePress);
+    window.addEventListener("mouseup", handleRelease);
+    window.addEventListener("touchend", handleRelease);
     return () => {
-      container.removeEventListener("mousedown", handleFocus);
-      container.removeEventListener("touchstart", handleFocus);
+      container.removeEventListener("mousedown", handlePress);
+      container.removeEventListener("touchstart", handlePress);
+      window.removeEventListener("mouseup", handleRelease);
+      window.removeEventListener("touchend", handleRelease);
     };
   }, [handleFocus]);
 
@@ -644,28 +550,16 @@ export function TitoOS({ onExit }: Readonly<Props>) {
             )}
           </div>
         </div>
-        <div className="px-4 py-1 text-sm text-neutral-500">
-          / for available commands · ctrl+c to exit
+        <div className="px-4 py-1 flex flex-wrap items-center gap-1 text-sm text-neutral-500">
+          <span>/ for available commands</span>
+          {playerActive && (
+            <>
+              <span aria-hidden="true">·</span>
+              <PlayerHints />
+            </>
+          )}
         </div>
       </div>
-
-      {/* Projects overlay */}
-      <AnimatePresence>
-        {showProjects && (
-          <motion.div
-            className="absolute inset-0"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.2 }}
-          >
-            <ProjectsOverlay
-              ref={projectsOverlayRef}
-              onClose={() => setShowProjects(false)}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
