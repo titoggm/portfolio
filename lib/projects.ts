@@ -30,6 +30,6 @@ export const PROJECTS: Project[] = [
     image: "/projects/contentful-agentic-layer-poster.jpg",
     video: "/projects/contentful-agentic-layer.mp4",
     imageAlt: "Contentful CMS Agentic Layer",
-    href: "https://excalidraw.com/?element=kBcw2si2Z2Mhqbe6idBCt",
+    href: "https://excalidraw.com/#json=thXviTgnycLDrLwyg4OR1,KPkwWNEvdtX9-OL2FBnTRQ",
   },
 ];
