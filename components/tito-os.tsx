@@ -13,6 +13,7 @@ import { TRACKS } from "@/lib/tracks";
 import DecryptedText from "./decrypted-text";
 import { ProjectCards } from "./project-cards";
 import { SEEK_STEP, TrackPlayer, type TrackPlayerHandle } from "./track-player";
+import { useProjectMediaPreload } from "./use-project-media-preload";
 
 interface CLICommand {
   name: string;
@@ -109,6 +110,10 @@ const INITIAL_OUTPUT: OutputItem[] = [
 ];
 
 export function TitoOS() {
+  // `/prime-projects` mounts the cards on demand, so their images are fetched
+  // ahead of time here rather than at mount.
+  useProjectMediaPreload();
+
   const [focused, setFocused] = useState(true);
   const [currentLine, setCurrentLine] = useState("/");
   const [selectedIndex, setSelectedIndex] = useState(0);

@@ -55,6 +55,16 @@ mock.module("next/image", () => ({
     className?: string;
     [key: string]: unknown;
   }) => React.createElement("img", { src, alt, width, height, className }),
+  // The real one resolves an optimizer URL, which needs the Next runtime. The
+  // preload hook only reads `src`/`srcSet`/`sizes` back off it.
+  getImageProps: ({
+    src,
+    sizes,
+  }: {
+    src: string;
+    sizes?: string;
+    [key: string]: unknown;
+  }) => ({ props: { src, srcSet: `${src} 1x`, sizes } }),
 }));
 
 afterEach(cleanup);
