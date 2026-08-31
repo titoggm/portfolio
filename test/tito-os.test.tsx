@@ -32,6 +32,24 @@ describe("TitoOS", () => {
   beforeEach(installFakeYouTube);
   afterEach(uninstallFakeYouTube);
 
+  test("preloads project images before /prime-projects is ever run", () => {
+    setup();
+    // The cards mount on demand, so without this the images only start
+    // downloading once the command runs and visibly pop in afterwards.
+    // React omits `href` when an imageSrcSet is given — the browser picks the
+    // candidate out of imagesrcset instead, so that is what carries the URL.
+    const preloaded = Array.from(
+      document.head.querySelectorAll<HTMLLinkElement>(
+        "link[rel='preload'][as='image']"
+      )
+    ).map((link) => link.getAttribute("imagesrcset") ?? "");
+
+    for (const { image } of PROJECTS) {
+      if (!image) continue;
+      expect(preloaded.some((srcSet) => srcSet.includes(image))).toBe(true);
+    }
+  });
+
   test("shows the banner on first render", () => {
     setup();
     expect(screen.getByText(/TG9 v1\.1\.192/)).toBeInTheDocument();

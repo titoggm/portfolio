@@ -8,8 +8,21 @@ import {
 } from "@/components/ui/card";
 import type { Project } from "@/lib/projects";
 
-const IMAGE_SIZES = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw";
 const MEDIA_CLASS = "w-full h-auto aspect-[16/10] object-cover";
+
+/**
+ * Shared by the rendered `<Image>` and by `useProjectMediaPreload`. Both have to
+ * pass identical values: the optimizer URL is derived from them, so any drift
+ * means the preload warms a URL the card never asks for.
+ */
+export const PROJECT_IMAGE_PROPS = {
+  width: 1200,
+  height: 750,
+  sizes: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
+  // Screenshots of dense UI: the default quality of 75 smears the small type
+  // once the optimizer re-encodes to WebP/AVIF. Allowlisted in next.config.ts.
+  quality: 90,
+} as const;
 
 export function ProjectCard({ project }: Readonly<{ project: Project }>) {
   const { title, description, image, imageAlt, video, href } = project;
@@ -36,11 +49,9 @@ export function ProjectCard({ project }: Readonly<{ project: Project }>) {
         />
       ) : image ? (
         <Image
+          {...PROJECT_IMAGE_PROPS}
           src={image}
           alt={imageAlt}
-          width={1200}
-          height={750}
-          sizes={IMAGE_SIZES}
           className={MEDIA_CLASS}
         />
       ) : null}

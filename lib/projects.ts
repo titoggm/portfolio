@@ -32,4 +32,13 @@ export const PROJECTS: Project[] = [
     imageAlt: "Contentful CMS Agentic Layer",
     href: "https://excalidraw.com/#json=thXviTgnycLDrLwyg4OR1,KPkwWNEvdtX9-OL2FBnTRQ",
   },
+  {
+    id: "nave-bank-card",
+    title: "Nave Bank Card",
+    description:
+      "Design of Nave Bank's card, from competitor research and sketches through to the physical product in hand.",
+    image: "/projects/nave-bank-card-image.png",
+    imageAlt: "Nave Bank Card",
+    href: "https://www.figma.com/design/UcK68Z9EtlFz0INra2bI0v/Nave-Bank-Projects?node-id=0-1&t=7tXEcKhToRAwSBAz-1",
+  },
 ];
