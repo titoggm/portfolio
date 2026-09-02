@@ -24,19 +24,24 @@ export const TRACKS: Track[] = [
     artist: "Mall Grab",
   },
   {
-    src: "https://www.youtube.com/embed/7t-KSEBsPP0?si=UPXio8L_uyeG9Ust",
-    title: "The Naked Now",
-    artist: "Panthera Krause",
+    src: "https://www.youtube.com/embed/j6Sj09QAm3Q?si=3aYR4gz5pxiShcAY",
+    title: "Bang Bang Debbie",
+    artist: "Dem 2",
+  },
+  {
+    src: "https://www.youtube.com/embed/RnMS-AjzhN0?si=hQEG4Yhw1Jov3GFa",
+    title: "As If",
+    artist: "Bass Collective",
+  },
+  {
+    src: "https://www.youtube.com/embed/wlHy9pCFJY4?si=JLP1hTZxok0SgFO1",
+    title: "Undercurrent",
+    artist: "Will Daley, ARJ (IR)",
   },
   {
     src: "https://www.youtube.com/embed/haf5VJQFTjo?si=wsPR_dBmBPEli2Yw",
     title: "Burning Up",
     artist: "DJ Pooch",
-  },
-  {
-    src: "https://www.youtube.com/embed/j6Sj09QAm3Q?si=3aYR4gz5pxiShcAY",
-    title: "Bang Bang Debbie",
-    artist: "Dem 2",
   },
   {
     src: "https://www.youtube.com/embed/yWJp2x27Nkc?si=B7Ilb3v6hGnpzSsw",
@@ -49,9 +54,9 @@ export const TRACKS: Track[] = [
     artist: "Nick Beringer",
   },
   {
-    src: "https://www.youtube.com/embed/bAOfZeOo5QE?si=4H6Cv18NtoqHHDGX",
-    title: "With You, I Can Be Anything",
-    artist: "Love Remain",
+    src: "https://www.youtube.com/embed/7t-KSEBsPP0?si=UPXio8L_uyeG9Ust",
+    title: "The Naked Now",
+    artist: "Panthera Krause",
   },
 ];
 

@@ -31,6 +31,7 @@ export interface TrackPlayerHandle {
  * controls, so the tracks stay playable even with no transport of our own.
  */
 function FallbackEmbed({ track }: Readonly<{ track: Track }>) {
+  const [loaded, setLoaded] = useState(false);
   const separator = track.src.includes("?") ? "&" : "?";
   const src = track.start
     ? `${track.src}${separator}start=${track.start}`
@@ -44,7 +45,12 @@ function FallbackEmbed({ track }: Readonly<{ track: Track }>) {
       height="300"
       allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture; accelerometer; gyroscope; web-share"
       loading="lazy"
-      className="block"
+      onLoad={() => setLoaded(true)}
+      // Same reveal as the API path, on the only readiness signal a bare embed
+      // has; the background is the frame's own in case the load event is missed.
+      className={`block bg-neutral-950 transition-opacity duration-200 ${
+        loaded ? "opacity-100" : "opacity-0"
+      }`}
       style={{ border: 0 }}
     />
   );
@@ -299,8 +305,19 @@ export const TrackPlayer = forwardRef<
             {/* Wrapper stays put: the API replaces the inner node with its iframe.
                 That iframe arrives inline and sized by attribute, so the box has
                 to force it block-level and full-bleed — inline would leave a
-                baseline descender strip under the video. */}
-            <div className="w-full h-full [&>iframe]:block [&>iframe]:w-full [&>iframe]:h-full">
+                baseline descender strip under the video.
+
+                It also arrives well before YouTube's document paints, and a
+                frame with nothing painted in it is filled with the browser's own
+                canvas — grey in Chrome (which reads our dark color-scheme), white
+                in Safari — over the top of anything behind it. So the frame is
+                held transparent until the API says it has something to show, and
+                the box's own neutral-950 stands in until then. */}
+            <div
+              className={`w-full h-full [&>iframe]:block [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:bg-neutral-950 transition-opacity duration-200 ${
+                ready ? "opacity-100" : "opacity-0"
+              }`}
+            >
               <div ref={hostRef} />
             </div>
             {/* The iframe would otherwise eat the click and pull focus out of the
