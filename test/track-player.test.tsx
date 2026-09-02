@@ -50,6 +50,18 @@ describe("TrackPlayer", () => {
     expect(screen.getByLabelText("Play")).toBeEnabled();
   });
 
+  // A frame with nothing painted in it is filled with the browser's own canvas
+  // (grey in Chrome, white in Safari), which would flash over the box behind it.
+  test("keeps the video frame transparent until the API reports ready", async () => {
+    render(<TrackPlayer tracks={TRACKS} />);
+    await waitFor(() => expect(players).toHaveLength(1));
+    const frame = players[0].host.parentElement;
+
+    expect(frame).toHaveClass("opacity-0");
+    await act(async () => players[0].emitReady());
+    expect(frame).toHaveClass("opacity-100");
+  });
+
   test("the play button drives the player and follows its reported state", async () => {
     const { player } = await setup();
 
@@ -175,5 +187,19 @@ describe("TrackPlayer without the IFrame API", () => {
     // Skipping tracks still works; only the transport is gone.
     expect(screen.getByLabelText("Next track")).toBeEnabled();
     expect(screen.getByLabelText("Play")).toBeDisabled();
+  });
+
+  test("keeps the fallback embed transparent until it loads", async () => {
+    const { container } = render(<TrackPlayer tracks={TRACKS} />);
+    const selector = `iframe[title="Track player for ${TRACKS[0].title}"]`;
+
+    await waitFor(() =>
+      expect(container.querySelector(selector)).toBeInTheDocument()
+    );
+    const embed = container.querySelector(selector) as HTMLIFrameElement;
+
+    expect(embed).toHaveClass("opacity-0");
+    fireEvent.load(embed);
+    expect(embed).toHaveClass("opacity-100");
   });
 });
