@@ -48,8 +48,15 @@ const COMMANDS: CLICommand[] = [
   },
 ];
 
-const ABOUT_PROSE =
-  "block max-w-[76ch] text-neutral-300 leading-relaxed";
+/**
+ * A 0.2px blur applied to every run of text in the terminal. It is far too
+ * slight to read as out of focus — it just softens the glyph edges, so the type
+ * looks drawn by a CRT rather than rasterised by the browser. Kept off images
+ * and the project cards, which stay sharp.
+ */
+const TEXT_BLUR = "blur-[0.2px]";
+
+const ABOUT_PROSE = `block max-w-[76ch] text-neutral-300 leading-relaxed ${TEXT_BLUR}`;
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/titoggm";
 const EMAIL = "titogm9@gmail.com";
@@ -100,9 +107,11 @@ const INITIAL_OUTPUT: OutputItem[] = [
   {
     id: 1,
     node: (
-      <div className="text-neutral-300">
+      <div className={`text-neutral-300 ${TEXT_BLUR}`}>
         <p>TG9 v1.1.192</p>
-        <p>Tito Garcia</p>
+        <p>
+          I’m Tito, an AI-native product designer who engineers
+        </p>
         <p>Welcome to my personal portfolio</p>
       </div>
     ),
@@ -161,15 +170,17 @@ export function TitoOS() {
   };
 
   const executeCommand = (cmd: CLICommand) => {
-    appendOutput(<span className="text-neutral-500">/{cmd.name}</span>);
+    appendOutput(
+      <span className={`text-neutral-500 ${TEXT_BLUR}`}>/{cmd.name}</span>
+    );
 
     switch (cmd.name) {
       case "prime-about": {
         const lines: React.ReactNode[] = [
           <span key="gap-0" className="block h-2" />,
           <span key="bio-1" className={ABOUT_PROSE}>
-            Hey, I’m Tito, an AI-Native Product Designer from Puerto Rico
-            and Boston, Massachusetts.
+            Hey, I’m Tito, an AI-native product designer who engineers. I’m
+            from Puerto Rico and Boston, Massachusetts.
           </span>,
           <span key="gap-1b" className="block h-2" />,
           <span key="bio-2" className={ABOUT_PROSE}>
@@ -219,7 +230,7 @@ export function TitoOS() {
       case "prime-track-ids": {
         if (playerActive) {
           appendOutput(
-            <span className="text-neutral-500">
+            <span className={`text-neutral-500 ${TEXT_BLUR}`}>
               player already running — <PlayerHints />
             </span>
           );
@@ -233,7 +244,7 @@ export function TitoOS() {
       case "prime-linkedin":
         window.open(LINKEDIN_URL, "_blank", "noopener,noreferrer");
         appendOutput(
-          <span className="text-neutral-300">
+          <span className={`text-neutral-300 ${TEXT_BLUR}`}>
             Opening LinkedIn profile...{" "}
             <a
               href={LINKEDIN_URL}
@@ -250,7 +261,7 @@ export function TitoOS() {
       case "prime-email":
         window.open(`mailto:${EMAIL}`, "_self");
         appendOutput(
-          <span className="text-neutral-300">
+          <span className={`text-neutral-300 ${TEXT_BLUR}`}>
             Opening email client...{" "}
             <a
               href={`mailto:${EMAIL}`}
@@ -265,7 +276,7 @@ export function TitoOS() {
       case "prime-projects":
         appendOutput(<ProjectCards />);
         appendOutput(
-          <span className="block pb-2 text-neutral-500">
+          <span className={`block pb-2 text-neutral-500 ${TEXT_BLUR}`}>
             adding more of my projects soon — T
           </span>
         );
@@ -474,7 +485,7 @@ export function TitoOS() {
                       executeCommand(cmd);
                       setCurrentLine("");
                     }}
-                    className="w-full pl-5 pr-4 py-1 flex items-center text-left cursor-pointer"
+                    className={`w-full pl-5 pr-4 py-1 flex items-center text-left cursor-pointer ${TEXT_BLUR}`}
                   >
                     <span className="text-sm shrink-0 w-56">
                       {isActive ? (
@@ -544,7 +555,9 @@ export function TitoOS() {
               dir="ltr"
               type="text"
             />
-            <span className="text-neutral-400">{currentLine}</span>
+            <span className={`text-neutral-400 ${TEXT_BLUR}`}>
+              {currentLine}
+            </span>
             {focused && (
               <span
                 className={`inline-block bg-neutral-300 w-[9px] self-start ${
@@ -555,7 +568,9 @@ export function TitoOS() {
             )}
           </div>
         </div>
-        <div className="px-4 py-1 flex flex-wrap items-center gap-1 text-sm text-neutral-500">
+        <div
+          className={`px-4 py-1 flex flex-wrap items-center gap-1 text-sm text-neutral-500 ${TEXT_BLUR}`}
+        >
           <span>/ for available commands</span>
           {playerActive && (
             <>

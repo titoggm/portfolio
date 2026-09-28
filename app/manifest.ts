@@ -4,8 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Tito Garcia's Portfolio",
     short_name: "Tito Garcia's Portfolio",
-    description:
-      "AI-Native Product Designer working across design and engineering.",
+    description: "I’m Tito, an AI-native product designer who engineers.",
     start_url: "/",
     display: "standalone",
     background_color: "#0a0a0a",
