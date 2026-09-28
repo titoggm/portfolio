@@ -48,15 +48,7 @@ const COMMANDS: CLICommand[] = [
   },
 ];
 
-/**
- * A 0.2px blur applied to every run of text in the terminal. It is far too
- * slight to read as out of focus — it just softens the glyph edges, so the type
- * looks drawn by a CRT rather than rasterised by the browser. Kept off images
- * and the project cards, which stay sharp.
- */
-const TEXT_BLUR = "blur-[0.2px]";
-
-const ABOUT_PROSE = `block max-w-[76ch] text-neutral-300 leading-relaxed ${TEXT_BLUR}`;
+const ABOUT_PROSE = "block max-w-[76ch] text-neutral-300 leading-relaxed";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/titoggm";
 const EMAIL = "titogm9@gmail.com";
@@ -107,7 +99,7 @@ const INITIAL_OUTPUT: OutputItem[] = [
   {
     id: 1,
     node: (
-      <div className={`text-neutral-300 ${TEXT_BLUR}`}>
+      <div className="text-neutral-300">
         <p>TG9 v1.1.192</p>
         <p>
           I’m Tito, an AI-native product designer who engineers
@@ -171,7 +163,7 @@ export function TitoOS() {
 
   const executeCommand = (cmd: CLICommand) => {
     appendOutput(
-      <span className={`text-neutral-500 ${TEXT_BLUR}`}>/{cmd.name}</span>
+      <span className="text-neutral-500">/{cmd.name}</span>
     );
 
     switch (cmd.name) {
@@ -230,7 +222,7 @@ export function TitoOS() {
       case "prime-track-ids": {
         if (playerActive) {
           appendOutput(
-            <span className={`text-neutral-500 ${TEXT_BLUR}`}>
+            <span className="text-neutral-500">
               player already running — <PlayerHints />
             </span>
           );
@@ -244,7 +236,7 @@ export function TitoOS() {
       case "prime-linkedin":
         window.open(LINKEDIN_URL, "_blank", "noopener,noreferrer");
         appendOutput(
-          <span className={`text-neutral-300 ${TEXT_BLUR}`}>
+          <span className="text-neutral-300">
             Opening LinkedIn profile...{" "}
             <a
               href={LINKEDIN_URL}
@@ -261,7 +253,7 @@ export function TitoOS() {
       case "prime-email":
         window.open(`mailto:${EMAIL}`, "_self");
         appendOutput(
-          <span className={`text-neutral-300 ${TEXT_BLUR}`}>
+          <span className="text-neutral-300">
             Opening email client...{" "}
             <a
               href={`mailto:${EMAIL}`}
@@ -276,7 +268,7 @@ export function TitoOS() {
       case "prime-projects":
         appendOutput(<ProjectCards />);
         appendOutput(
-          <span className={`block pb-2 text-neutral-500 ${TEXT_BLUR}`}>
+          <span className="block pb-2 text-neutral-500">
             adding more of my projects soon — T
           </span>
         );
@@ -485,7 +477,7 @@ export function TitoOS() {
                       executeCommand(cmd);
                       setCurrentLine("");
                     }}
-                    className={`w-full pl-5 pr-4 py-1 flex items-center text-left cursor-pointer ${TEXT_BLUR}`}
+                    className="w-full pl-5 pr-4 py-1 flex items-center text-left cursor-pointer"
                   >
                     <span className="text-sm shrink-0 w-56">
                       {isActive ? (
@@ -555,7 +547,7 @@ export function TitoOS() {
               dir="ltr"
               type="text"
             />
-            <span className={`text-neutral-400 ${TEXT_BLUR}`}>
+            <span className="text-neutral-400">
               {currentLine}
             </span>
             {focused && (
@@ -569,7 +561,7 @@ export function TitoOS() {
           </div>
         </div>
         <div
-          className={`px-4 py-1 flex flex-wrap items-center gap-1 text-sm text-neutral-500 ${TEXT_BLUR}`}
+          className="px-4 py-1 flex flex-wrap items-center gap-1 text-sm text-neutral-500"
         >
           <span>/ for available commands</span>
           {playerActive && (
