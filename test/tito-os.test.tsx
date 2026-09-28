@@ -54,6 +54,9 @@ describe("TitoOS", () => {
     setup();
     expect(screen.getByText(/TG9 v1\.1\.192/)).toBeInTheDocument();
     expect(
+      screen.getByText(/an AI-native product designer who engineers/)
+    ).toBeInTheDocument();
+    expect(
       screen.getByText(/Welcome to my personal portfolio/)
     ).toBeInTheDocument();
   });
@@ -109,8 +112,11 @@ describe("TitoOS", () => {
     const { input } = setup();
     runCommand(input, "prime-about");
     await waitFor(() => {
+      // Anchored on the location sentence rather than the opening line: the
+      // banner prints that same introduction, so a match on it would find two
+      // elements once the bio is on screen.
       expect(
-        screen.getByText(/AI-Native Product Designer/)
+        screen.getByText(/from Puerto Rico and Boston, Massachusetts/)
       ).toBeInTheDocument();
     });
   });

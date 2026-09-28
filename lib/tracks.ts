@@ -9,9 +9,9 @@ export interface Track {
 
 export const TRACKS: Track[] = [
   {
-    src: "https://www.youtube.com/embed/ZInibX0Zb6U?si=9jEiz7jmvSm74mrS",
-    title: "Hold On, Hold On",
-    artist: "Jak Stratford",
+    src: "https://www.youtube.com/embed/PHEbmPRBuU8?si=Lf8eVViO19JAHkVP",
+    title: "Spirit Wave",
+    artist: "Mall Grab",
   },
   {
     src: "https://www.youtube.com/embed/ayHf80j1qqI?si=4nRa87Zg-ODBRehP",
@@ -19,44 +19,39 @@ export const TRACKS: Track[] = [
     artist: "Interplanetary Criminal",
   },
   {
-    src: "https://www.youtube.com/embed/PHEbmPRBuU8?si=Lf8eVViO19JAHkVP",
-    title: "Spirit Wave",
-    artist: "Mall Grab",
+    src: "https://www.youtube.com/embed/c1vbu9dyE8U?si=d0C5sFIKWDOkwh5a",
+    title: "Untitled 02",
+    artist: "Leod",
   },
   {
-    src: "https://www.youtube.com/embed/j6Sj09QAm3Q?si=3aYR4gz5pxiShcAY",
-    title: "Bang Bang Debbie",
-    artist: "Dem 2",
+    src: "https://www.youtube.com/embed/NdlNDmeqM8I?si=eJ0CX7_WCcQOd2no",
+    title: "Climax (Bomba Records)",
+    artist: "Smooth & Simmonds",
   },
   {
-    src: "https://www.youtube.com/embed/RnMS-AjzhN0?si=hQEG4Yhw1Jov3GFa",
-    title: "As If",
-    artist: "Bass Collective",
+    src: "https://www.youtube.com/embed/04AZSXWSBpI?si=lVAnXjPBOw6t6ZYp",
+    title: "Northern Piano (Hardcore Piano Mix)",
+    artist: "Ultraworld",
   },
   {
-    src: "https://www.youtube.com/embed/wlHy9pCFJY4?si=JLP1hTZxok0SgFO1",
-    title: "Undercurrent",
-    artist: "Will Daley, ARJ (IR)",
+    src: "https://www.youtube.com/embed/ZInibX0Zb6U?si=9jEiz7jmvSm74mrS",
+    title: "Hold On, Hold On",
+    artist: "Jak Stratford",
   },
   {
-    src: "https://www.youtube.com/embed/haf5VJQFTjo?si=wsPR_dBmBPEli2Yw",
-    title: "Burning Up",
-    artist: "DJ Pooch",
+    src: "https://www.youtube.com/embed/CgtZEHbTtyI?si=ZkvqBP7MB5-QfFNf",
+    title: "Towlift",
+    artist: "Loidis",
   },
   {
-    src: "https://www.youtube.com/embed/yWJp2x27Nkc?si=B7Ilb3v6hGnpzSsw",
-    title: "Vine A Traer Te' Arte' (1994)",
-    artist: "Pizarro",
+    src: "https://www.youtube.com/embed/PJ38Sp8zhHs?si=p2AYrxW7MfGVQmMR",
+    title: "Don't You Want Me Edit",
+    artist: "Soul Mass Transit System",
   },
   {
-    src: "https://www.youtube.com/embed/tsAzsP9V7HI?si=LFiRNJGL9m_PJKaD",
-    title: "Win My Heart (Manuel Regnet Remix)",
-    artist: "Nick Beringer",
-  },
-  {
-    src: "https://www.youtube.com/embed/7t-KSEBsPP0?si=UPXio8L_uyeG9Ust",
-    title: "The Naked Now",
-    artist: "Panthera Krause",
+    src: "https://www.youtube.com/embed/OE2DEdPs_lY?si=pQCiEa7ZA1g-TV5_",
+    title: "A Song For Remy",
+    artist: "Goshawk",
   },
 ];
 

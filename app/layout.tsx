@@ -13,7 +13,7 @@ const firaCode = Fira_Code({
 const SITE_URL = "https://titogarcia.dev";
 const SITE_NAME = "Tito Garcia's Portfolio";
 const SITE_DESCRIPTION =
-  "AI-Native Product Designer working across design and engineering.";
+  "I’m Tito, an AI-native product designer who engineers.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
