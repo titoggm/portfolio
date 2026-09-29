@@ -4,9 +4,9 @@
 
 A terminal-style portfolio website for my product design work, live at **[titogarcia.dev](https://titogarcia.dev)**.
 
-I had a lot of fun building it over a weekend, and I'll keep improving it over time.
+I had a lot of fun building it, and I'll keep improving it over time.
 
-<img src="docs/images/home.png" alt="Home" width="100%" />
+<img src="docs/images/home.webp" alt="Home" width="100%" />
 
 </div>
 
@@ -16,15 +16,15 @@ I had a lot of fun building it over a weekend, and I'll keep improving it over t
 
 - **Terminal navigation:** browse the site by typing slash commands such as `/prime-projects` and `/prime-about`.
 
-  <img src="docs/images/about.png" alt="About" width="100%" />
+  <img src="docs/images/about.webp" alt="About" width="100%" />
 
 - **Project cards:** case studies with video and image previews.
 
-  <img src="docs/images/projects.png" alt="Projects" width="100%" />
+  <img src="docs/images/projects.webp" alt="Projects" width="100%" />
 
 - **Track player:** a built-in music player with keyboard controls.
 
-  <img src="docs/images/track-player.png" alt="Track player" width="100%" />
+  <img src="docs/images/track-player.webp" alt="Track player" width="100%" />
 
 ---
 
