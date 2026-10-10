@@ -31,12 +31,16 @@ const COMMANDS: CLICommand[] = [
     description: "Browse Tito's favorite tracks",
   },
   {
-    name: "prime-projects",
-    description: "View selected projects and creative work by Tito",
+    name: "prime-work",
+    description: "Browse Tito's selected work",
   },
   {
     name: "prime-linkedin",
     description: "View Tito's LinkedIn profile",
+  },
+  {
+    name: "prime-github",
+    description: "View Tito's GitHub profile",
   },
   {
     name: "prime-email",
@@ -51,7 +55,8 @@ const COMMANDS: CLICommand[] = [
 const ABOUT_PROSE = "block max-w-[76ch] text-neutral-300 leading-relaxed";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/titoggm";
-const EMAIL = "titogm9@gmail.com";
+const GITHUB_URL = "https://github.com/titoggm";
+const EMAIL ="titogm9@gmail.com";
 
 // ---------------------------------------------------------------------------
 // TitoOS
@@ -111,7 +116,7 @@ const INITIAL_OUTPUT: OutputItem[] = [
 ];
 
 export function TitoOS() {
-  // `/prime-projects` mounts the cards on demand, so their images are fetched
+  // `/prime-work` mounts the cards on demand, so their images are fetched
   // ahead of time here rather than at mount.
   useProjectMediaPreload();
 
@@ -191,7 +196,7 @@ export function TitoOS() {
           </span>,
           <span key="gap-3" className="block h-2" />,
           <span key="bio-4" className={ABOUT_PROSE}>
-            Run <span className="text-neutral-400">/prime-projects</span> to see
+            Run <span className="text-neutral-400">/prime-work</span> to see
             some of my favourite work.
           </span>,
           <span key="gap-4" className="block h-2" />,
@@ -250,6 +255,23 @@ export function TitoOS() {
         );
         break;
 
+      case "prime-github":
+        window.open(GITHUB_URL, "_blank", "noopener,noreferrer");
+        appendOutput(
+          <span className="text-neutral-300">
+            Opening GitHub profile...{" "}
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-white hover:text-neutral-300"
+            >
+              {GITHUB_URL}
+            </a>
+          </span>
+        );
+        break;
+
       case "prime-email":
         window.open(`mailto:${EMAIL}`, "_self");
         appendOutput(
@@ -265,7 +287,7 @@ export function TitoOS() {
         );
         break;
 
-      case "prime-projects":
+      case "prime-work":
         appendOutput(<ProjectCards />);
         appendOutput(
           <span className="block pb-2 text-neutral-500">

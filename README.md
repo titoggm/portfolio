@@ -14,7 +14,7 @@ I had a lot of fun building it, and I'll keep improving it over time.
 
 ## Features
 
-- **Terminal navigation:** browse the site by typing slash commands such as `/prime-projects` and `/prime-about`.
+- **Terminal navigation:** browse the site by typing slash commands such as `/prime-work` and `/prime-about`.
 
   <img src="docs/images/about.webp" alt="About" width="100%" />
 

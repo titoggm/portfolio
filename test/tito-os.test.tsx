@@ -32,7 +32,7 @@ describe("TitoOS", () => {
   beforeEach(installFakeYouTube);
   afterEach(uninstallFakeYouTube);
 
-  test("preloads project images before /prime-projects is ever run", () => {
+  test("preloads project images before /prime-work is ever run", () => {
     setup();
     // The cards mount on demand, so without this the images only start
     // downloading once the command runs and visibly pop in afterwards.
@@ -74,8 +74,9 @@ describe("TitoOS", () => {
     for (const name of [
       "prime-about",
       "prime-track-ids",
-      "prime-projects",
+      "prime-work",
       "prime-linkedin",
+      "prime-github",
       "prime-email",
       "clear",
     ]) {
@@ -83,26 +84,26 @@ describe("TitoOS", () => {
     }
   });
 
-  test("/prime-projects renders a project card in the output", () => {
+  test("/prime-work renders a project card in the output", () => {
     const { input } = setup();
-    runCommand(input, "prime-projects");
+    runCommand(input, "prime-work");
     expect(screen.getByText(PROJECTS[0].title)).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: new RegExp(PROJECTS[0].title, "i") })
     ).toBeInTheDocument();
   });
 
-  test("/prime-projects no longer renders the old overlay chrome", () => {
+  test("/prime-work no longer renders the old overlay chrome", () => {
     const { input } = setup();
-    runCommand(input, "prime-projects");
+    runCommand(input, "prime-work");
     expect(screen.queryByText(/esc to close/i)).toBeNull();
     expect(screen.queryByLabelText("Close projects")).toBeNull();
     expect(screen.queryByLabelText("Next project")).toBeNull();
   });
 
-  test("/prime-projects signs off with the more-coming note", () => {
+  test("/prime-work signs off with the more-coming note", () => {
     const { input } = setup();
-    runCommand(input, "prime-projects");
+    runCommand(input, "prime-work");
     expect(
       screen.getByText(/adding more of my projects soon/i)
     ).toBeInTheDocument();
@@ -121,9 +122,29 @@ describe("TitoOS", () => {
     });
   });
 
+  test("/prime-github opens the GitHub profile in a new tab", () => {
+    const originalOpen = window.open;
+    const calls: unknown[][] = [];
+    window.open = ((...args: unknown[]) => {
+      calls.push(args);
+      return null;
+    }) as typeof window.open;
+    try {
+      const { input } = setup();
+      runCommand(input, "prime-github");
+      expect(calls[0]?.[0]).toBe("https://github.com/titoggm");
+      expect(calls[0]?.[1]).toBe("_blank");
+      expect(
+        screen.getByRole("link", { name: "https://github.com/titoggm" })
+      ).toBeInTheDocument();
+    } finally {
+      window.open = originalOpen;
+    }
+  });
+
   test("/clear resets the output back to the banner", () => {
     const { input, container } = setup();
-    runCommand(input, "prime-projects");
+    runCommand(input, "prime-work");
     expect(screen.getByText(PROJECTS[0].title)).toBeInTheDocument();
     runCommand(input, "clear");
     expect(screen.queryByText(PROJECTS[0].title)).toBeNull();

@@ -7,7 +7,7 @@ import { PROJECTS } from "@/lib/projects";
 import { PROJECT_IMAGE_PROPS } from "./project-card";
 
 /**
- * Project cards do not exist until `/prime-projects` runs, so `priority` on the
+ * Project cards do not exist until `/prime-work` runs, so `priority` on the
  * `<Image>` buys nothing — the request only starts once the card mounts, and the
  * image visibly pops in after it. Warm the same optimizer URLs on page load
  * instead: the command takes seconds to type, by which point the bytes are in
