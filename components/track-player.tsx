@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
+import { Pause, Play, SkipBack, SkipForward } from "@phosphor-icons/react";
 import { formatTime, youtubeId, type Track } from "@/lib/tracks";
 import {
   loadYouTubeApi,
@@ -385,7 +385,7 @@ export const TrackPlayer = forwardRef<
               aria-label="Previous track"
               className={transportClass}
             >
-              <SkipBack size={20} aria-hidden="true" />
+              <SkipBack size={24} aria-hidden="true" />
             </button>
             <button
               type="button"
@@ -395,9 +395,9 @@ export const TrackPlayer = forwardRef<
               className={transportClass}
             >
               {playing ? (
-                <Pause size={28} aria-hidden="true" />
+                <Pause size={32} aria-hidden="true" />
               ) : (
-                <Play size={28} aria-hidden="true" />
+                <Play size={32} aria-hidden="true" />
               )}
             </button>
             <button
@@ -407,7 +407,7 @@ export const TrackPlayer = forwardRef<
               aria-label="Next track"
               className={transportClass}
             >
-              <SkipForward size={20} aria-hidden="true" />
+              <SkipForward size={24} aria-hidden="true" />
             </button>
           </div>
 

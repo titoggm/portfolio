@@ -19,9 +19,9 @@ export const TRACKS: Track[] = [
     artist: "Interplanetary Criminal",
   },
   {
-    src: "https://www.youtube.com/embed/c1vbu9dyE8U?si=d0C5sFIKWDOkwh5a",
-    title: "Untitled 02",
-    artist: "Leod",
+    src: "https://www.youtube.com/embed/R78Fxy46t3A?si=84Rn4Muoc1AeQVjR",
+    title: "NE",
+    artist: "Retromigration",
   },
   {
     src: "https://www.youtube.com/embed/NdlNDmeqM8I?si=eJ0CX7_WCcQOd2no",
@@ -39,9 +39,9 @@ export const TRACKS: Track[] = [
     artist: "Jak Stratford",
   },
   {
-    src: "https://www.youtube.com/embed/CgtZEHbTtyI?si=ZkvqBP7MB5-QfFNf",
-    title: "Towlift",
-    artist: "Loidis",
+    src: "https://www.youtube.com/embed/J3LyT5tLTx0?si=YR0GC7YIYgnklFH9",
+    title: "Brave New World",
+    artist: "Grant Nelson",
   },
   {
     src: "https://www.youtube.com/embed/PJ38Sp8zhHs?si=p2AYrxW7MfGVQmMR",
@@ -49,9 +49,9 @@ export const TRACKS: Track[] = [
     artist: "Soul Mass Transit System",
   },
   {
-    src: "https://www.youtube.com/embed/OE2DEdPs_lY?si=pQCiEa7ZA1g-TV5_",
-    title: "A Song For Remy",
-    artist: "Goshawk",
+    src: "https://www.youtube.com/embed/7DPv2CWh_nY?si=hfy_lrD19eGQUVUt",
+    title: "Wiggy",
+    artist: "Janeret",
   },
 ];
 

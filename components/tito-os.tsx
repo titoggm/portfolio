@@ -6,8 +6,8 @@ import {
   ArrowLeft,
   ArrowRight,
   ArrowUp,
-  ChevronRight,
-} from "lucide-react";
+  CaretRight,
+} from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { TRACKS } from "@/lib/tracks";
 import DecryptedText from "./decrypted-text";
@@ -550,7 +550,7 @@ export function TitoOS() {
           )}
         </AnimatePresence>
         <div className="border-y border-neutral-700 pr-4 py-1 flex items-center leading-none text-sm">
-          <ChevronRight
+          <CaretRight
             className="text-neutral-400 mr-1r shrink-0"
             size={20}
           />
