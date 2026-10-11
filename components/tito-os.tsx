@@ -11,6 +11,7 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import { TRACKS } from "@/lib/tracks";
 import DecryptedText from "./decrypted-text";
+import { NamePortrait } from "./name-portrait";
 import { ProjectCards } from "./project-cards";
 import { SEEK_STEP, TrackPlayer, type TrackPlayerHandle } from "./track-player";
 import { useProjectMediaPreload } from "./use-project-media-preload";
@@ -107,7 +108,8 @@ const INITIAL_OUTPUT: OutputItem[] = [
       <div className="text-neutral-300">
         <p>TG9 v1.1.192</p>
         <p>
-          I’m Tito, an AI-native product designer who engineers
+          I’m <NamePortrait>Tito</NamePortrait>, an AI-native product designer
+          who engineers
         </p>
         <p>Welcome to my personal portfolio</p>
       </div>
